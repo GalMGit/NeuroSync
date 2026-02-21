@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Abstractions", "Shared.Abstractions\Shared.Abstractions.csproj", "{B01EB0D4-F076-4AE6-A687-04125FBB38D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Contracts", "Shared.Contracts\Shared.Contracts.csproj", "{947D09F9-105A-42FC-BAFE-3FD337247E47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Messaging", "Shared.Messaging\Shared.Messaging.csproj", "{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B01EB0D4-F076-4AE6-A687-04125FBB38D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B01EB0D4-F076-4AE6-A687-04125FBB38D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B01EB0D4-F076-4AE6-A687-04125FBB38D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B01EB0D4-F076-4AE6-A687-04125FBB38D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{947D09F9-105A-42FC-BAFE-3FD337247E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{947D09F9-105A-42FC-BAFE-3FD337247E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{947D09F9-105A-42FC-BAFE-3FD337247E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{947D09F9-105A-42FC-BAFE-3FD337247E47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
