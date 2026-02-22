@@ -53,6 +53,13 @@ public static class AuthExtension
                     }
                 };
             });
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Authenticated", policy =>
+                policy.RequireAuthenticatedUser());
+    
+            options.AddPolicy("PublicAccess", policy =>
+                policy.RequireAssertion(context => true));
+        });
     }
 }

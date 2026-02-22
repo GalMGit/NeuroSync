@@ -4,7 +4,7 @@ using Shared.Contracts.DTOs.Auth.Requests;
 
 namespace AuthService.API.Features.User;
 
-public class AuthEndpoints : IEndpoint
+public class AuthEndpoints() : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -18,19 +18,34 @@ public class AuthEndpoints : IEndpoint
         IUserService userService,
         RegisterRequest request)
     {
-        var email = await userService
-            .CreateAsync(request);
+        try
+        {
+            var email = await userService
+                .CreateAsync(request);
         
-        return Results.Ok(email);
+            return Results.Ok(email);
+        }
+        catch (Exception e)
+        {
+            return Results.BadRequest(e.Message);
+        }
+        
     }
     
     private async Task<IResult> Login(
         IUserService userService,
         LoginRequest request)
     {
-        var token = await userService
-            .LoginAsync(request);
+        try
+        {
+            var token = await userService
+                .LoginAsync(request);
         
-        return Results.Ok(token);
+            return Results.Ok(token);
+        }
+        catch (Exception e)
+        {
+            return Results.BadRequest(e.Message);
+        }
     }
 }
