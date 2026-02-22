@@ -5,6 +5,7 @@ using AuthService.CORE.Interfaces.IRepositories;
 using AuthService.CORE.Interfaces.IServices;
 using AuthService.DAL.Database.DatabaseContext;
 using AuthService.DAL.Repositories;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using NeuroSync.MinimalApi.Endpoints;
 
@@ -16,6 +17,9 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddOpenApi();
+        services.AddRabbitMq();
+        services.AddSwaggerGen();
         services.AddJwtConfiguration(configuration);
         services.AddEndpoints(typeof(Program).Assembly);
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
@@ -37,6 +41,17 @@ public static class DependencyInjection
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IUserService, UserService>();
+        return services;
+    }
+
+    private static IServiceCollection AddRabbitMq(
+        this IServiceCollection services)
+    {
+        services.AddMassTransit(x =>
+        {
+            x.UsingRabbitMq();
+        });
+
         return services;
     }
 }

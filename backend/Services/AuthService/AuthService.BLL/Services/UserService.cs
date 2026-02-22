@@ -2,8 +2,10 @@ using AuthService.CORE.Entities;
 using AuthService.CORE.Interfaces.IRepositories;
 using AuthService.CORE.Interfaces.IServices;
 using AutoMapper;
+using MassTransit;
 using Shared.Contracts.DTOs.Auth.Requests;
 using Shared.Contracts.DTOs.Auth.Responses;
+using Shared.Messaging.UserEvents;
 
 namespace AuthService.BLL.Services;
 
@@ -11,6 +13,7 @@ public class UserService(
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
     IJwtProvider jwtProvider,
+    IPublishEndpoint publishEndpoint,
     IMapper mapper
     ) : IUserService
 {
@@ -36,6 +39,12 @@ public class UserService(
         var createdUser = await userRepository
             .CreateAsync(user);
 
+        await publishEndpoint.Publish(new UserCreatedEvent
+        {
+            UserId = createdUser.Id,
+            Username = createdUser.Username
+        });
+        
         return mapper.Map<RegisterResponse>(createdUser);
     }
 

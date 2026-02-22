@@ -6,7 +6,11 @@ builder.Services.AddConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
-
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.MapEndpoints();
 
 await  app.RunAsync();
