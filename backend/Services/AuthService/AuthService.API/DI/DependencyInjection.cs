@@ -18,7 +18,6 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddOpenApi();
-        services.AddRabbitMq();
         services.AddSwaggerGen();
         services.AddJwtConfiguration(configuration);
         services.AddEndpoints(typeof(Program).Assembly);
@@ -44,14 +43,5 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddRabbitMq(
-        this IServiceCollection services)
-    {
-        services.AddMassTransit(x =>
-        {
-            x.UsingRabbitMq();
-        });
-
-        return services;
-    }
+   
 }

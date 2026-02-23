@@ -1,10 +1,5 @@
 using System.Security.Claims;
 using ApiGateway.Extensions.AuthExtensions;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AspNetCore.SwaggerUI;
-using Yarp.ReverseProxy.Swagger;
-using Yarp.ReverseProxy.Swagger.Extensions;
 
 namespace ApiGateway.DI;
 
@@ -18,15 +13,6 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         
-        
-        var reverseProxyConfig = configuration
-            .GetSection("ReverseProxy");
-        
-        services.AddReverseProxy()
-            .LoadFromConfig(reverseProxyConfig)
-            .AddSwagger(reverseProxyConfig);
-        
-       
         services.AddAuth(configuration);
         
         return services;
