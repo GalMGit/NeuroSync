@@ -13,6 +13,11 @@
         <PackageReference Include="Ocelot" Version="24.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
         <ProjectReference Include="../../../Shared/Shared.Contracts/Shared.Contracts.csproj"/>
+        <ProjectReference Include="../../../Shared/Shared.AuthExtensions/Shared.AuthExtensions.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Extensions\" />
     </ItemGroup>
 
     

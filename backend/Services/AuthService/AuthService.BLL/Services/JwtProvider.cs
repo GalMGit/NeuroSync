@@ -5,7 +5,7 @@ using AuthService.CORE.Entities;
 using AuthService.CORE.Interfaces.IServices;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Contracts.Options;
+using Shared.Options;
 
 namespace AuthService.BLL.Services;
 

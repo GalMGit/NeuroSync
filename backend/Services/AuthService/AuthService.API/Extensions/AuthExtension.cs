@@ -1,10 +1,9 @@
-using Shared.Contracts.Options;
+using Shared.Options;
 
 namespace AuthService.API.Extensions;
 
 public static class AuthExtension
 {
-    
     public static void AddJwtConfiguration(
         this IServiceCollection services,
         IConfiguration configuration)

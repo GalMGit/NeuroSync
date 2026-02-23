@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Contracts", "Shared.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Messaging", "Shared.Messaging\Shared.Messaging.csproj", "{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.AuthExtensions", "Shared.AuthExtensions\Shared.AuthExtensions.csproj", "{292A6ED4-2A09-494E-953C-F8F876065313}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Options", "Shared.Options\Shared.Options.csproj", "{DF8EADFA-BB1B-4D94-A113-B00B5A70E917}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40EA789E-6491-4E40-A80C-1C0ACC5E1BC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{292A6ED4-2A09-494E-953C-F8F876065313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{292A6ED4-2A09-494E-953C-F8F876065313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{292A6ED4-2A09-494E-953C-F8F876065313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{292A6ED4-2A09-494E-953C-F8F876065313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF8EADFA-BB1B-4D94-A113-B00B5A70E917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF8EADFA-BB1B-4D94-A113-B00B5A70E917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF8EADFA-BB1B-4D94-A113-B00B5A70E917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF8EADFA-BB1B-4D94-A113-B00B5A70E917}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

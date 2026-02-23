@@ -1,10 +1,11 @@
-using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Contracts.Options;
+using Shared.Options;
 
-namespace ApiGateway.Extensions.AuthExtensions;
+namespace Shared.AuthExtensions;
 
 public static class AuthExtension
 {
@@ -54,13 +55,6 @@ public static class AuthExtension
                     }
                 };
             });
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("Authenticated", policy =>
-                policy.RequireAuthenticatedUser());
-    
-            options.AddPolicy("PublicAccess", policy =>
-                policy.RequireAssertion(context => true));
-        });
+        services.AddAuthorization();
     }
 }

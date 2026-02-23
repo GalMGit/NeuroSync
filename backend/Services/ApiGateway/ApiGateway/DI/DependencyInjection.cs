@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using ApiGateway.Extensions.AuthExtensions;
+using Shared.AuthExtensions;
 
 namespace ApiGateway.DI;
 

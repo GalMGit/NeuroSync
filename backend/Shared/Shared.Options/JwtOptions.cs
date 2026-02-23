@@ -1,4 +1,4 @@
-namespace Shared.Contracts.Options;
+namespace Shared.Options;
 
 public class JwtOptions
 {

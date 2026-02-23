@@ -20,7 +20,7 @@ public class AuthEndpoints() : IEndpoint
     {
         try
         {
-            var email = await userService
+            var email  = await userService
                 .CreateAsync(request);
         
             return Results.Ok(email);

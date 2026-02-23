@@ -20,7 +20,6 @@ public static class DependencyInjection
         services.AddRabbitMq();
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
         services.AddServices(configuration);
-        services.AddEndpoints(typeof(Program).Assembly);
         
         return services;
     }
