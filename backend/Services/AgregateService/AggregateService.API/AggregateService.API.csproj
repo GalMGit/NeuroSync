@@ -12,6 +12,8 @@
     <ItemGroup>
         <ProjectReference Include="../../../Shared/Shared.Contracts/Shared.Contracts.csproj"/>
         <ProjectReference Include="../../../Shared/Shared.AuthExtensions/Shared.AuthExtensions.csproj"/>
+        <ProjectReference Include="../../../Shared/Shared.WebApi/Shared.WebApi.csproj"/>
+        
     </ItemGroup>
 
 </Project>

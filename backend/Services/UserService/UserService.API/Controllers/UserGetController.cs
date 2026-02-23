@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserService.API.Controllers.Base;
+using Shared.WebApi;
 using UserService.CORE.Interfaces.IServices;
 
 namespace UserService.API.Controllers;

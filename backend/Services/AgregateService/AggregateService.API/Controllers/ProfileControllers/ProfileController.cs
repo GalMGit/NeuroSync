@@ -1,5 +1,5 @@
-using AggregateService.API.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
+using Shared.WebApi;
 
 namespace AggregateService.API.Controllers.ProfileControllers;
 

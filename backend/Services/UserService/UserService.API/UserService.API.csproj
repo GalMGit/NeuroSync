@@ -25,6 +25,8 @@
       <ProjectReference Include="..\UserService.CORE\UserService.CORE.csproj" />
       <ProjectReference Include="..\UserService.DAL\UserService.DAL.csproj" />
         <ProjectReference Include="../../../Shared/Shared.AuthExtensions/Shared.AuthExtensions.csproj"/>
+        <ProjectReference Include="../../../Shared/Shared.WebApi/Shared.WebApi.csproj"/>
     </ItemGroup>
+    
 
 </Project>
