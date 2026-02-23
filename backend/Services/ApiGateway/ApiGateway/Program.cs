@@ -11,8 +11,6 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapMiddlewares();
-
 await app.UseOcelot();
 
 app.Run();

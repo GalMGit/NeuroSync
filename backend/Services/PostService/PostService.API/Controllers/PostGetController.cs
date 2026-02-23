@@ -18,6 +18,15 @@ public class PostGetController(
 
         return Ok(posts);
     }
+
+    [HttpGet("{postId:guid}")]
+    public async Task<IActionResult> GetPostByIdAsync(Guid postId)
+    {
+        var post = await postService
+            .GetByIdAsync(postId);
+
+        return Ok(post);
+    }
     
     [HttpGet("user")]
     public async Task<IActionResult> GetMyPostsAsync()
