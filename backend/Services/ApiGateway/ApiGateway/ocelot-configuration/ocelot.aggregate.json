@@ -1,0 +1,31 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/profile/user",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamPathTemplate": "/aggregate/profile/full",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5123
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/post/{postId}",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamPathTemplate": "/aggregate/posts/{postId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5123
+        }
+      ]
+    }
+  ]
+}

@@ -9,23 +9,39 @@ namespace AggregateService.API.Controllers.ProfileControllers;
 [Route("aggregate/profile")]
 public class ProfileController(
     IUserServiceClient userClient,
-    IPostServiceClient postClient) : BaseController
+    IPostServiceClient postClient
+) : BaseController
 {
     [HttpGet("full")]
     public async Task<IActionResult> GetUserFullProfile()
     {
-        var profile = await userClient
-            .GetProfileAsync();
-        
-        var posts = await postClient
-            .GetUserPostsAsync();
+        var profileTask = userClient.GetProfileAsync();
+        var postsTask = postClient.GetUserPostsAsync();
+
+        await Task.WhenAll(postsTask, profileTask);
+
+        var profileResult = await profileTask;
+        var postsResult = await postsTask;
 
         var profileWithPosts = new ProfileWithPosts
         {
-            Posts = posts,
-            Profile = profile
+            Profile = profileResult.Success ? profileResult.Data : null,
+            Posts = postsResult.Success ? postsResult.Data ?? [] : []
         };
         
+        if (!profileResult.Success && profileResult.ErrorCode == "UNAUTHORIZED")
+        {
+            return Unauthorized(new { message = "Необходима авторизация" });
+        }
+        
+        if (!profileResult.Success && !postsResult.Success)
+        {
+            return StatusCode(503, new { 
+                message = "Сервисы временно недоступны",
+                details = profileWithPosts 
+            });
+        }
+
         return Ok(profileWithPosts);
     }
 }

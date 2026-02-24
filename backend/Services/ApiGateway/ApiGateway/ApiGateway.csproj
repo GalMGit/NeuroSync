@@ -17,7 +17,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Extensions\" />
+      <_ContentIncludedByDefault Remove="ocelot\ocelot.aggregate.json" />
+      <_ContentIncludedByDefault Remove="ocelot\ocelot.auth.json" />
+      <_ContentIncludedByDefault Remove="ocelot\ocelot.comments.json" />
+      <_ContentIncludedByDefault Remove="ocelot\ocelot.global.json" />
+      <_ContentIncludedByDefault Remove="ocelot\ocelot.posts.json" />
+      <_ContentIncludedByDefault Remove="ocelot\ocelot.user.json" />
     </ItemGroup>
 
     
