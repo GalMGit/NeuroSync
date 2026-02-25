@@ -8,7 +8,7 @@ namespace AggregateService.API.Controllers.PostControllers;
 [ApiController]
 [Route("aggregate/posts")]
 public class PostController(
-    IPostServiceClient postServiceClient, 
+    IPostServiceClient postServiceClient,
     ICommentServiceClient commentServiceClient
 ) : BaseController
 {
@@ -20,28 +20,40 @@ public class PostController(
 
         await Task.WhenAll(postTask, commentsTask);
 
-        var postResult = await postTask;
-        var commentsResult = await commentsTask;
+        var postResult = postTask.Result;
+        var commentsResult = commentsTask.Result;
 
-        var postsWithComments = new PostWithComments
-        {
-            Post = postResult.Success ? postResult.Data : null,
-            Comments = commentsResult.Success ? commentsResult.Data ?? [] : []
-        };
-        
         if (!postResult.Success && postResult.ErrorCode == "NOT_FOUND")
         {
             return NotFound(new { message = "Пост не найден" });
         }
-        
-        if (!postResult.Success && !commentsResult.Success)
+
+        if (!postResult.Success)
         {
-            return StatusCode(503, new { 
-                message = "Сервисы временно недоступны",
-                details = postsWithComments 
+            return StatusCode(503, new
+            {
+                message = "Сервис постов временно недоступен",
+                errorCode = postResult.ErrorCode
             });
         }
-        
-        return Ok(postsWithComments);
+
+        var postWithComments = new PostWithComments
+        {
+            Post = postResult.Data!,
+            Comments = commentsResult.Success
+                ? commentsResult.Data ?? []
+                : []
+        };
+
+        if (!commentsResult.Success)
+        {
+            return Ok(new
+            {
+                message = "Сервис комментариев временно недоступен",
+                data = postWithComments
+            });
+        }
+
+        return Ok(postWithComments);
     }
 }

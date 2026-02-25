@@ -7,4 +7,5 @@ public interface IPostServiceClient
 {
     Task<ServiceResponse<IEnumerable<PostResponse>>> GetUserPostsAsync();
     Task<ServiceResponse<PostResponse>> GetPostByIdAsync(Guid postId);
+    Task<ServiceResponse<IEnumerable<PostResponse>>> GetPostsByCommunityAsync(Guid communityId);
 }

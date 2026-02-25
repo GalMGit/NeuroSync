@@ -29,6 +29,13 @@ builder.Services.AddHttpClient("CommentService", client =>
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<TokenPropagationHandler>();
 
+builder.Services.AddHttpClient("CommunityService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Services:CommunityService"]!);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.Timeout = TimeSpan.FromSeconds(30);
+}).AddHttpMessageHandler<TokenPropagationHandler>();
+
 
 
 builder.Services.AddAuth(builder.Configuration);
@@ -36,6 +43,7 @@ builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddScoped<IUserServiceClient, UserServiceClient>();
 builder.Services.AddScoped<IPostServiceClient, PostServiceClient>();
 builder.Services.AddScoped<ICommentServiceClient, CommentServiceClient>();
+builder.Services.AddScoped<ICommunityServiceClient, CommunityServiceClient>();
 
 
 builder.Services.AddOpenApi();

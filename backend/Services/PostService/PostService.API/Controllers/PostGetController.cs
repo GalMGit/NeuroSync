@@ -27,12 +27,21 @@ public class PostGetController(
 
         return Ok(post);
     }
-    
+
     [HttpGet("user")]
     public async Task<IActionResult> GetMyPostsAsync()
     {
         var posts = await postService
             .GetAllByUserAsync(UserId);
+
+        return Ok(posts);
+    }
+
+    [HttpGet("community/{communityId:guid}")]
+    public async Task<IActionResult> GetAllByCommunityAsync(Guid communityId)
+    {
+        var posts = await postService
+            .GetAllByCommunityAsync(communityId);
 
         return Ok(posts);
     }

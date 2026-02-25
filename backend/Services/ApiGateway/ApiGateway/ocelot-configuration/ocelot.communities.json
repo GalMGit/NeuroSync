@@ -1,0 +1,58 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/communities",
+      "UpstreamHttpMethod": ["Post"],
+      "DownstreamPathTemplate": "/api/communities/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5056
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/communities",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamPathTemplate": "/api/communities/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5056
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/communities/{id}",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamPathTemplate": "/api/communities/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5056
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/communities/user",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamPathTemplate": "/api/communities/user",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5056
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    }
+  ]
+}

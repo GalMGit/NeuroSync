@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Sockets;
 using AggregateService.API.DTOs.Errors;
 using AggregateService.API.Services.Interfaces;
 using Shared.Contracts.DTOs.Post.Responses;
@@ -10,61 +12,91 @@ public class PostServiceClient(
 {
     private readonly HttpClient _httpClient =
         clientFactory.CreateClient("PostService");
-    
+
     public async Task<ServiceResponse<IEnumerable<PostResponse>>> GetUserPostsAsync()
     {
         try
         {
-            var response = await _httpClient.GetAsync("/api/posts/user");
+            var response = await _httpClient
+                .GetAsync("/api/posts/user");
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content
                     .ReadFromJsonAsync<IEnumerable<PostResponse>>();
 
-                return ServiceResponse<IEnumerable<PostResponse>>.Ok(result ?? []);
+                return ServiceResponse<IEnumerable<PostResponse>>
+                    .Ok(result ?? []);
             }
-            
-            return ServiceResponse<IEnumerable<PostResponse>>.Ok([], "Посты не найдены");
+
+            return ServiceResponse<IEnumerable<PostResponse>>
+                .Ok([], "Посты не найдены");
         }
-        catch (HttpRequestException ex) when (ex.InnerException is System.Net.Sockets.SocketException)
+        catch (HttpRequestException ex)
+            when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<IEnumerable<PostResponse>>.ServiceUnavailable("постов");
-        }
-        catch (TaskCanceledException)
-        {
-            return ServiceResponse<IEnumerable<PostResponse>>.Timeout("постов");
+            return ServiceResponse<IEnumerable<PostResponse>>
+                .ServiceUnavailable("постов");
         }
     }
-    
+
+    public async Task<ServiceResponse<IEnumerable<PostResponse>>> GetPostsByCommunityAsync(Guid communityId)
+    {
+        try
+        {
+            var response = await _httpClient
+                .GetAsync($"/api/posts/community/{communityId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content
+                    .ReadFromJsonAsync<IEnumerable<PostResponse>>();
+
+                return ServiceResponse<IEnumerable<PostResponse>>
+                    .Ok(result ?? []);
+            }
+
+            return ServiceResponse<IEnumerable<PostResponse>>
+                .Ok([], "Посты не найдены");
+        }
+        catch (HttpRequestException ex)
+            when (ex.InnerException is SocketException)
+        {
+            return ServiceResponse<IEnumerable<PostResponse>>
+                .ServiceUnavailable("постов");
+        }
+    }
+
     public async Task<ServiceResponse<PostResponse>> GetPostByIdAsync(Guid postId)
     {
         try
         {
-            var response = await _httpClient.GetAsync($"/api/posts/{postId}");
+            var response = await _httpClient
+                .GetAsync($"/api/posts/{postId}");
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content
                     .ReadFromJsonAsync<PostResponse>();
 
-                return ServiceResponse<PostResponse>.Ok(result!);
+                return ServiceResponse<PostResponse>
+                    .Ok(result!);
             }
 
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                return ServiceResponse<PostResponse>.Fail("Пост не найден", "NOT_FOUND");
+                return ServiceResponse<PostResponse>
+                    .Fail("Пост не найден", "NOT_FOUND");
             }
 
-            return ServiceResponse<PostResponse>.Fail("Ошибка при получении поста", "POST_SERVICE_ERROR");
+            return ServiceResponse<PostResponse>
+                .Fail("Ошибка при получении поста", "POST_SERVICE_ERROR");
         }
-        catch (HttpRequestException ex) when (ex.InnerException is System.Net.Sockets.SocketException)
+        catch (HttpRequestException ex)
+            when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<PostResponse>.ServiceUnavailable("постов");
-        }
-        catch (TaskCanceledException)
-        {
-            return ServiceResponse<PostResponse>.Timeout("постов");
+            return ServiceResponse<PostResponse>
+                .ServiceUnavailable("постов");
         }
     }
 }

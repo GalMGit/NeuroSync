@@ -21,6 +21,7 @@ public class PostService(
             Id = Guid.NewGuid(),
             CreatedAt = DateTime.UtcNow,
             AuthorId = userId,
+            CommunityId = request.CommunityId,
             PosterUrl = request.PosterUrl,
             Title = request.Title,
             Description = request.Description
@@ -52,6 +53,14 @@ public class PostService(
     {
         var posts = await postRepository
             .GetAllByUserAsync(userId);
+
+        return mapper.Map<IEnumerable<PostResponse>>(posts);
+    }
+
+    public async Task<IEnumerable<PostResponse>?> GetAllByCommunityAsync(Guid communityId)
+    {
+        var posts = await postRepository
+            .GetAllByCommunityAsync(communityId);
 
         return mapper.Map<IEnumerable<PostResponse>>(posts);
     }

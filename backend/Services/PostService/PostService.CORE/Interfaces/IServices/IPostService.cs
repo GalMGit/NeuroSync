@@ -9,4 +9,5 @@ public interface IPostService
     Task<PostResponse?> GetByIdAsync(Guid id);
     Task<IEnumerable<PostResponse>?> GetAllAsync();
     Task<IEnumerable<PostResponse>?> GetAllByUserAsync(Guid userId);
+    Task<IEnumerable<PostResponse>?> GetAllByCommunityAsync(Guid communityId);
 }

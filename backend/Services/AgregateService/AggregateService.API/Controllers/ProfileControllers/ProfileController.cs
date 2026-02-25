@@ -18,27 +18,42 @@ public class ProfileController(
         var profileTask = userClient.GetProfileAsync();
         var postsTask = postClient.GetUserPostsAsync();
 
-        await Task.WhenAll(postsTask, profileTask);
+        await Task.WhenAll(profileTask, postsTask);
 
-        var profileResult = await profileTask;
-        var postsResult = await postsTask;
+        var profileResult = profileTask.Result;
+        var postsResult = postsTask.Result;
+
+        if (!profileResult.Success && profileResult.ErrorCode == "UNAUTHORIZED")
+        {
+            return Unauthorized(new
+            {
+                message = "Необходима авторизация",
+                errorCode = "UNAUTHORIZED"
+            });
+        }
+
+        if (!profileResult.Success)
+        {
+            return StatusCode(503, new
+            {
+                message = "Сервис пользователей временно недоступен",
+                errorCode = profileResult.ErrorCode
+            });
+        }
 
         var profileWithPosts = new ProfileWithPosts
         {
-            Profile = profileResult.Success ? profileResult.Data : null,
+            Profile = profileResult.Data!,
             Posts = postsResult.Success ? postsResult.Data ?? [] : []
         };
-        
-        if (!profileResult.Success && profileResult.ErrorCode == "UNAUTHORIZED")
+
+        if (!postsResult.Success)
         {
-            return Unauthorized(new { message = "Необходима авторизация" });
-        }
-        
-        if (!profileResult.Success && !postsResult.Success)
-        {
-            return StatusCode(503, new { 
-                message = "Сервисы временно недоступны",
-                details = profileWithPosts 
+            return Ok(new
+            {
+                message = "Профиль загружен, но сервис постов временно недоступен",
+                data = profileWithPosts,
+                warnings = new[] { "Posts service unavailable" }
             });
         }
 

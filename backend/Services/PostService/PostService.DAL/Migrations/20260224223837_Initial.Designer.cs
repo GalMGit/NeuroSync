@@ -12,7 +12,7 @@ using PostService.DAL.Database.DatabaseContext;
 namespace PostService.DAL.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20260223154748_Initial")]
+    [Migration("20260224223837_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -32,6 +32,9 @@ namespace PostService.DAL.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CommunityId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")

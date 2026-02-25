@@ -1,3 +1,4 @@
+using System.Net.Sockets;
 using AggregateService.API.DTOs.Errors;
 using AggregateService.API.Services.Interfaces;
 using Shared.Contracts.DTOs.Comment.Responses;
@@ -10,7 +11,7 @@ public class CommentServiceClient(
 {
     private readonly HttpClient _httpClient =
         clientFactory.CreateClient("CommentService");
-    
+
     public async Task<ServiceResponse<IEnumerable<CommentResponse>>> GetCommentsByPostAsync(Guid postId)
     {
         try
@@ -23,18 +24,18 @@ public class CommentServiceClient(
                 var result = await response.Content
                     .ReadFromJsonAsync<IEnumerable<CommentResponse>>();
 
-                return ServiceResponse<IEnumerable<CommentResponse>>.Ok(result ?? []);
+                return ServiceResponse<IEnumerable<CommentResponse>>
+                    .Ok(result ?? []);
             }
-            
-            return ServiceResponse<IEnumerable<CommentResponse>>.Ok([], "Комментарии не найдены");
+
+            return ServiceResponse<IEnumerable<CommentResponse>>
+                .Ok([], "Комментарии не найдены");
         }
-        catch (HttpRequestException ex) when (ex.InnerException is System.Net.Sockets.SocketException)
+        catch (HttpRequestException ex)
+            when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<IEnumerable<CommentResponse>>.ServiceUnavailable("комментариев");
-        }
-        catch (TaskCanceledException)
-        {
-            return ServiceResponse<IEnumerable<CommentResponse>>.Timeout("комментариев");
+            return ServiceResponse<IEnumerable<CommentResponse>>
+                .ServiceUnavailable("комментариев");
         }
     }
 }

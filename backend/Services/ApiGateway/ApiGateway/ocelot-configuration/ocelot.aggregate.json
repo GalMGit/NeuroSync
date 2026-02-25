@@ -26,6 +26,18 @@
           "Port": 5123
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/community/{communityId}",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamPathTemplate": "/aggregate/communities/{communityId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5123
+        }
+      ]
     }
   ]
 }

@@ -19,7 +19,7 @@ public class PostRepository(
     public async Task<Post?> GetByIdAsync(Guid id)
     {
         return await database.Posts
-            .FirstOrDefaultAsync(x => 
+            .FirstOrDefaultAsync(x =>
                 x.Id == id
                 && !x.IsDeleted);
     }
@@ -51,6 +51,15 @@ public class PostRepository(
         return await database.Posts
             .Where(x =>
                 x.AuthorId == userId
+                && !x.IsDeleted)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Post>?> GetAllByCommunityAsync(Guid communityId)
+    {
+        return await database.Posts
+            .Where(x =>
+                x.CommunityId == communityId
                 && !x.IsDeleted)
             .ToListAsync();
     }

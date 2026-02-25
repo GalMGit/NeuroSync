@@ -361,6 +361,212 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
+          "Port": 5056
+        }
+      ],
+      "DownstreamHttpMethod": null,
+      "DownstreamPathTemplate": "/api/communities/",
+      "FileCacheOptions": null,
+      "Priority": 1,
+      "RequestIdKey": null,
+      "RouteClaimsRequirement": {},
+      "RouteIsCaseSensitive": false,
+      "SecurityOptions": {
+        "IPAllowedList": [],
+        "IPBlockedList": [],
+        "ExcludeAllowedFromBlocked": false
+      },
+      "UpstreamHeaderTemplates": {},
+      "UpstreamHeaderTransform": {},
+      "UpstreamHost": null,
+      "UpstreamHttpMethod": [
+        "Post"
+      ],
+      "UpstreamPathTemplate": "/gateway/communities",
+      "AuthenticationOptions": {
+        "AllowedScopes": null,
+        "AllowAnonymous": null,
+        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKeys": null,
+        "HasScheme": true,
+        "HasScope": false
+      },
+      "CacheOptions": null,
+      "DownstreamHttpVersionPolicy": null,
+      "DownstreamHttpVersion": null,
+      "DownstreamScheme": "http",
+      "HttpHandlerOptions": null,
+      "Key": null,
+      "LoadBalancerOptions": null,
+      "Metadata": null,
+      "QoSOptions": null,
+      "RateLimitOptions": null,
+      "ServiceName": null,
+      "ServiceNamespace": null,
+      "Timeout": null
+    },
+    {
+      "AddClaimsToRequest": {},
+      "AddHeadersToRequest": {},
+      "AddQueriesToRequest": {},
+      "ChangeDownstreamPathTemplate": {},
+      "DangerousAcceptAnyServerCertificateValidator": false,
+      "DelegatingHandlers": [],
+      "DownstreamHeaderTransform": {},
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5056
+        }
+      ],
+      "DownstreamHttpMethod": null,
+      "DownstreamPathTemplate": "/api/communities/",
+      "FileCacheOptions": null,
+      "Priority": 1,
+      "RequestIdKey": null,
+      "RouteClaimsRequirement": {},
+      "RouteIsCaseSensitive": false,
+      "SecurityOptions": {
+        "IPAllowedList": [],
+        "IPBlockedList": [],
+        "ExcludeAllowedFromBlocked": false
+      },
+      "UpstreamHeaderTemplates": {},
+      "UpstreamHeaderTransform": {},
+      "UpstreamHost": null,
+      "UpstreamHttpMethod": [
+        "Get"
+      ],
+      "UpstreamPathTemplate": "/gateway/communities",
+      "AuthenticationOptions": null,
+      "CacheOptions": null,
+      "DownstreamHttpVersionPolicy": null,
+      "DownstreamHttpVersion": null,
+      "DownstreamScheme": "http",
+      "HttpHandlerOptions": null,
+      "Key": null,
+      "LoadBalancerOptions": null,
+      "Metadata": null,
+      "QoSOptions": null,
+      "RateLimitOptions": null,
+      "ServiceName": null,
+      "ServiceNamespace": null,
+      "Timeout": null
+    },
+    {
+      "AddClaimsToRequest": {},
+      "AddHeadersToRequest": {},
+      "AddQueriesToRequest": {},
+      "ChangeDownstreamPathTemplate": {},
+      "DangerousAcceptAnyServerCertificateValidator": false,
+      "DelegatingHandlers": [],
+      "DownstreamHeaderTransform": {},
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5056
+        }
+      ],
+      "DownstreamHttpMethod": null,
+      "DownstreamPathTemplate": "/api/communities/{id}",
+      "FileCacheOptions": null,
+      "Priority": 1,
+      "RequestIdKey": null,
+      "RouteClaimsRequirement": {},
+      "RouteIsCaseSensitive": false,
+      "SecurityOptions": {
+        "IPAllowedList": [],
+        "IPBlockedList": [],
+        "ExcludeAllowedFromBlocked": false
+      },
+      "UpstreamHeaderTemplates": {},
+      "UpstreamHeaderTransform": {},
+      "UpstreamHost": null,
+      "UpstreamHttpMethod": [
+        "Get"
+      ],
+      "UpstreamPathTemplate": "/gateway/communities/{id}",
+      "AuthenticationOptions": null,
+      "CacheOptions": null,
+      "DownstreamHttpVersionPolicy": null,
+      "DownstreamHttpVersion": null,
+      "DownstreamScheme": "http",
+      "HttpHandlerOptions": null,
+      "Key": null,
+      "LoadBalancerOptions": null,
+      "Metadata": null,
+      "QoSOptions": null,
+      "RateLimitOptions": null,
+      "ServiceName": null,
+      "ServiceNamespace": null,
+      "Timeout": null
+    },
+    {
+      "AddClaimsToRequest": {},
+      "AddHeadersToRequest": {},
+      "AddQueriesToRequest": {},
+      "ChangeDownstreamPathTemplate": {},
+      "DangerousAcceptAnyServerCertificateValidator": false,
+      "DelegatingHandlers": [],
+      "DownstreamHeaderTransform": {},
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5056
+        }
+      ],
+      "DownstreamHttpMethod": null,
+      "DownstreamPathTemplate": "/api/communities/user",
+      "FileCacheOptions": null,
+      "Priority": 1,
+      "RequestIdKey": null,
+      "RouteClaimsRequirement": {},
+      "RouteIsCaseSensitive": false,
+      "SecurityOptions": {
+        "IPAllowedList": [],
+        "IPBlockedList": [],
+        "ExcludeAllowedFromBlocked": false
+      },
+      "UpstreamHeaderTemplates": {},
+      "UpstreamHeaderTransform": {},
+      "UpstreamHost": null,
+      "UpstreamHttpMethod": [
+        "Get"
+      ],
+      "UpstreamPathTemplate": "/gateway/communities/user",
+      "AuthenticationOptions": {
+        "AllowedScopes": null,
+        "AllowAnonymous": null,
+        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKeys": null,
+        "HasScheme": true,
+        "HasScope": false
+      },
+      "CacheOptions": null,
+      "DownstreamHttpVersionPolicy": null,
+      "DownstreamHttpVersion": null,
+      "DownstreamScheme": "http",
+      "HttpHandlerOptions": null,
+      "Key": null,
+      "LoadBalancerOptions": null,
+      "Metadata": null,
+      "QoSOptions": null,
+      "RateLimitOptions": null,
+      "ServiceName": null,
+      "ServiceNamespace": null,
+      "Timeout": null
+    },
+    {
+      "AddClaimsToRequest": {},
+      "AddHeadersToRequest": {},
+      "AddQueriesToRequest": {},
+      "ChangeDownstreamPathTemplate": {},
+      "DangerousAcceptAnyServerCertificateValidator": false,
+      "DelegatingHandlers": [],
+      "DownstreamHeaderTransform": {},
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
           "Port": 5123
         }
       ],
@@ -438,6 +644,54 @@
         "Get"
       ],
       "UpstreamPathTemplate": "/gateway/post/{postId}",
+      "AuthenticationOptions": null,
+      "CacheOptions": null,
+      "DownstreamHttpVersionPolicy": null,
+      "DownstreamHttpVersion": null,
+      "DownstreamScheme": "http",
+      "HttpHandlerOptions": null,
+      "Key": null,
+      "LoadBalancerOptions": null,
+      "Metadata": null,
+      "QoSOptions": null,
+      "RateLimitOptions": null,
+      "ServiceName": null,
+      "ServiceNamespace": null,
+      "Timeout": null
+    },
+    {
+      "AddClaimsToRequest": {},
+      "AddHeadersToRequest": {},
+      "AddQueriesToRequest": {},
+      "ChangeDownstreamPathTemplate": {},
+      "DangerousAcceptAnyServerCertificateValidator": false,
+      "DelegatingHandlers": [],
+      "DownstreamHeaderTransform": {},
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5123
+        }
+      ],
+      "DownstreamHttpMethod": null,
+      "DownstreamPathTemplate": "/aggregate/communities/{communityId}",
+      "FileCacheOptions": null,
+      "Priority": 1,
+      "RequestIdKey": null,
+      "RouteClaimsRequirement": {},
+      "RouteIsCaseSensitive": false,
+      "SecurityOptions": {
+        "IPAllowedList": [],
+        "IPBlockedList": [],
+        "ExcludeAllowedFromBlocked": false
+      },
+      "UpstreamHeaderTemplates": {},
+      "UpstreamHeaderTransform": {},
+      "UpstreamHost": null,
+      "UpstreamHttpMethod": [
+        "Get"
+      ],
+      "UpstreamPathTemplate": "/gateway/community/{communityId}",
       "AuthenticationOptions": null,
       "CacheOptions": null,
       "DownstreamHttpVersionPolicy": null,
