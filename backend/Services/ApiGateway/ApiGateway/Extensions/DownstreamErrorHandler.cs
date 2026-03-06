@@ -6,14 +6,14 @@ namespace ApiGateway.Extensions;
 public class DownstreamErrorHandler : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(
-        HttpRequestMessage request, 
+        HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
         try
         {
             return await base.SendAsync(request, cancellationToken);
         }
-        catch (HttpRequestException ex) 
+        catch (HttpRequestException ex)
             when (ex.InnerException is System.Net.Sockets.SocketException)
         {
             var response = new HttpResponseMessage(HttpStatusCode.BadGateway)
@@ -29,7 +29,7 @@ public class DownstreamErrorHandler : DelegatingHandler
                     "application/json"
                 )
             };
-            
+
             return response;
         }
     }

@@ -13,15 +13,16 @@ public class UserRepository(
     {
         await database.Users
             .AddAsync(entity);
-        
+
         await database.SaveChangesAsync();
-        
+
         return entity;
     }
 
-    public Task<User?> GetByIdAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await database.Users
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public Task<IEnumerable<User>?> GetAllAsync()
@@ -34,9 +35,14 @@ public class UserRepository(
         throw new NotImplementedException();
     }
 
-    public Task SoftDeleteAsync(Guid id)
+    public async Task SoftDeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await database.Users
+            .Where(x => x.Id == id
+                && !x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, true));
     }
 
     public Task ForceDeleteAsync(Guid id)

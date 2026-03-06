@@ -24,22 +24,33 @@ public class UserService(
         };
 
         await userRepository
-            .CreateUserInfoAsync(user);
+            .CreateAsync(user);
     }
 
     public async Task<UserProfileResponse?> GetMyProfileAsync(Guid userId)
     {
         var myProfile = await userRepository
-            .GetMyProfileAsync(userId);
+            .GetByIdAsync(userId);
 
         return mapper.Map<UserProfileResponse>(myProfile);
     }
-    
+
     public async Task<UserProfileResponse?> GetUserProfileAsync(Guid userId)
     {
         var profile = await userRepository
-            .GetUserInfoAsync(userId);
+            .GetByIdAsync(userId);
+
+        if(profile is null || profile.IsDeleted)
+        {
+            throw new Exception("Аккаунт был удален");
+        }
 
         return mapper.Map<UserProfileResponse>(profile);
+    }
+
+    public async Task SoftDeleteAsync(Guid userId)
+    {
+        await userRepository
+            .SoftDeleteAsync(userId);
     }
 }

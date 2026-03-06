@@ -4,6 +4,18 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:5206")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddConfiguration(builder.Configuration);
 
 builder.Configuration
@@ -16,6 +28,8 @@ builder.Services.AddOcelot(builder.Configuration)
     .AddDelegatingHandler<DownstreamErrorHandler>(global: true);
 
 var app = builder.Build();
+
+app.UseCors("FrontendClient");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -23,6 +23,18 @@
           "Port": 5235
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/user/delete/{userId}",
+      "UpstreamHttpMethod": ["Delete"],
+      "DownstreamPathTemplate": "/api/auth/delete/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5235
+        }
+      ]
     }
   ]
 }

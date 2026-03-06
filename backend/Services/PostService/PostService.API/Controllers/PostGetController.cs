@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PostService.CORE.Interfaces.IServices;
 using Shared.WebApi;
@@ -11,6 +12,7 @@ public class PostGetController(
     ) : BaseController
 {
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAllAsync()
     {
         var posts = await postService

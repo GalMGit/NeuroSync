@@ -25,7 +25,7 @@ public class UserService(
 
         if (await userRepository.EmailExistsAsync(request.Email))
             throw new Exception("Пользователь с таким email существует");
-        
+
         var user = new User
         {
             Id = Guid.NewGuid(),
@@ -44,7 +44,7 @@ public class UserService(
             UserId = createdUser.Id,
             Username = createdUser.Username
         });
-        
+
         return mapper.Map<RegisterResponse>(createdUser);
     }
 
@@ -64,5 +64,27 @@ public class UserService(
         {
             Token = token
         };
+    }
+
+    public async Task SoftDeleteAsync(Guid userId)
+    {
+        var user = await userRepository
+            .GetByIdAsync(userId);
+
+        if(user is null || user.IsDeleted)
+        {
+            throw new Exception("Пользователь не найден");
+        }
+
+        if(user is not null && !user.IsDeleted)
+        {
+            await userRepository
+                .SoftDeleteAsync(userId);
+
+            await publishEndpoint.Publish(new UserDeletedEvent
+            {
+                UserId = userId
+            });
+        }
     }
 }

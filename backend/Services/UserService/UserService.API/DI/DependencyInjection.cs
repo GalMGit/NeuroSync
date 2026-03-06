@@ -44,12 +44,18 @@ public static class DependencyInjection
         services.AddMassTransit(x =>
         {
             x.AddConsumer<UserCreatedConsumer>();
+            x.AddConsumer<UserDeletedConsumer>();
             
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.ReceiveEndpoint("user-created-queue", e =>
                 {
                     e.ConfigureConsumer<UserCreatedConsumer>(context);
+                });
+                
+                cfg.ReceiveEndpoint("user-deleted-queue", e =>
+                {
+                    e.ConfigureConsumer<UserDeletedConsumer>(context);
                 });
             });
         });

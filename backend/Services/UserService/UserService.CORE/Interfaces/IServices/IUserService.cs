@@ -8,4 +8,5 @@ public interface IUserService
     Task CreateUserInfoAsync(UserCreatedEvent @event);
     Task<UserProfileResponse?> GetMyProfileAsync(Guid userId);
     Task<UserProfileResponse?> GetUserProfileAsync(Guid userId);
+    Task SoftDeleteAsync(Guid userId);
 }
