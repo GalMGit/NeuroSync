@@ -10,7 +10,7 @@ namespace UserService.BLL.Services;
 public class UserService(
     IUserRepository userRepository,
     IMapper mapper
-    ) : IUserService
+) : IUserService
 {
     public async Task CreateUserInfoAsync(UserCreatedEvent @event)
     {
@@ -27,25 +27,22 @@ public class UserService(
             .CreateAsync(user);
     }
 
-    public async Task<UserProfileResponse?> GetMyProfileAsync(Guid userId)
-    {
-        var myProfile = await userRepository
-            .GetByIdAsync(userId);
-
-        return mapper.Map<UserProfileResponse>(myProfile);
-    }
-
     public async Task<UserProfileResponse?> GetUserProfileAsync(Guid userId)
     {
         var profile = await userRepository
-            .GetByIdAsync(userId);
+            .GetByIdAsync(userId)
+                ?? throw new Exception("Аккаунт не найден");
 
-        if(profile is null || profile.IsDeleted)
-        {
-            throw new Exception("Аккаунт был удален");
-        }
 
-        return mapper.Map<UserProfileResponse>(profile);
+        return profile.IsDeleted
+            ? throw new Exception("Аккаунт был удален")
+            : mapper.Map<UserProfileResponse>(profile);
+    }
+
+    public async Task RestoreAccountAsync(Guid userId)
+    {
+        await userRepository
+            .RestoreUserAsync(userId);
     }
 
     public async Task SoftDeleteAsync(Guid userId)

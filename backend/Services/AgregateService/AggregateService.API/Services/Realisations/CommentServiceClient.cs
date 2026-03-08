@@ -29,7 +29,7 @@ public class CommentServiceClient(
             }
 
             return ServiceResponse<IEnumerable<CommentResponse>>
-                .Ok([], "Комментарии не найдены");
+                .Ok([]);
         }
         catch (HttpRequestException ex)
             when (ex.InnerException is SocketException)

@@ -7,5 +7,6 @@ public interface IUserService
 {
     Task<RegisterResponse> CreateAsync(RegisterRequest request);
     Task<LoginResponse> LoginAsync(LoginRequest request);
+    Task RestoreAccountAsync(LoginRequest request);
     Task SoftDeleteAsync(Guid userId);
 }

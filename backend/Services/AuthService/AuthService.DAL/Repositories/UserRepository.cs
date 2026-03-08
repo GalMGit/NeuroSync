@@ -70,4 +70,14 @@ public class UserRepository(
             .AnyAsync(u =>
                 u.Email.ToLower() == email.ToLower());
     }
+
+    public async Task RestoreUserAsync(Guid userId)
+    {
+        await database.Users
+            .Where(x =>
+                x.Id == userId
+                && x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s => s.IsDeleted, false));
+    }
 }

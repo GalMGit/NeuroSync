@@ -52,11 +52,14 @@ public class UserService(
     {
         var user = await userRepository
             .GetByEmailAsync(request.Email);
-
+        
         if (user is null || !passwordHasher
                 .VerifyHash(request.Password, user.PasswordHash))
             throw new Exception("Неверный логин или пароль");
 
+        if (user.IsDeleted)
+            throw new Exception("Пользователь не найден");
+        
         var token = jwtProvider
             .GenerateToken(user);
 
@@ -64,6 +67,31 @@ public class UserService(
         {
             Token = token
         };
+    }
+
+    public async Task RestoreAccountAsync(LoginRequest request)
+    {
+        var user = await userRepository
+                       .GetByEmailAsync(request.Email) ??
+                   throw new Exception("Нет такого пользователя");
+
+        if (!user.IsDeleted)
+            throw new Exception("Пользователь не удален");
+
+        if (passwordHasher.VerifyHash(request.Password, user.PasswordHash))
+        {
+            await userRepository
+                .RestoreUserAsync(user.Id);
+
+            await publishEndpoint.Publish(new UserRestoredEvent
+            {
+                UserId = user.Id
+            });
+        }
+        else
+        {
+            throw new Exception("Неверные данные");
+        }
     }
 
     public async Task SoftDeleteAsync(Guid userId)
@@ -75,8 +103,8 @@ public class UserService(
         {
             throw new Exception("Пользователь не найден");
         }
-
-        if(user is not null && !user.IsDeleted)
+    
+        if(!user.IsDeleted)
         {
             await userRepository
                 .SoftDeleteAsync(userId);

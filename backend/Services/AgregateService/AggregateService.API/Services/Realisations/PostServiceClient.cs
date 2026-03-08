@@ -30,7 +30,7 @@ public class PostServiceClient(
             }
 
             return ServiceResponse<IEnumerable<PostResponse>>
-                .Ok([], "Посты не найдены");
+                .Ok([]);
         }
         catch (HttpRequestException ex)
             when (ex.InnerException is SocketException)
@@ -57,7 +57,7 @@ public class PostServiceClient(
             }
 
             return ServiceResponse<IEnumerable<PostResponse>>
-                .Ok([], "Посты не найдены");
+                .Ok([]);
         }
         catch (HttpRequestException ex)
             when (ex.InnerException is SocketException)

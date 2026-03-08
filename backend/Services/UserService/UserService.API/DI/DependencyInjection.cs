@@ -20,7 +20,7 @@ public static class DependencyInjection
         services.AddRabbitMq();
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
         services.AddServices(configuration);
-        
+
         return services;
     }
 
@@ -45,17 +45,23 @@ public static class DependencyInjection
         {
             x.AddConsumer<UserCreatedConsumer>();
             x.AddConsumer<UserDeletedConsumer>();
-            
+            x.AddConsumer<UserRestoredConsumer>();
+
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.ReceiveEndpoint("user-created-queue", e =>
                 {
                     e.ConfigureConsumer<UserCreatedConsumer>(context);
                 });
-                
+
                 cfg.ReceiveEndpoint("user-deleted-queue", e =>
                 {
                     e.ConfigureConsumer<UserDeletedConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("user-restored-queue", e =>
+                {
+                    e.ConfigureConsumer<UserRestoredConsumer>(context);
                 });
             });
         });

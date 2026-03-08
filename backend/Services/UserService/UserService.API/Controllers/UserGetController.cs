@@ -18,7 +18,7 @@ public class UserGetController(
         try
         {
             var profile = await userService
-                .GetMyProfileAsync(UserId);
+                .GetUserProfileAsync(UserId);
 
             return Ok(profile);
         }
@@ -29,6 +29,53 @@ public class UserGetController(
         catch (Exception e)
         {
             return BadRequest(e.Message);
+        }
+    }
+    
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> GetUserProfile(Guid userId)
+    {
+        try
+        {
+            var profile = await userService
+                .GetUserProfileAsync(userId);
+
+            if (profile == null)
+            {
+                return NotFound(new { 
+                    message = "Пользователь не найден",
+                    errorCode = "USER_NOT_FOUND" 
+                });
+            }
+
+            return Ok(profile);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+        catch (Exception e)
+        {
+            if (e.Message.Contains("удален"))
+            {
+                return NotFound(new { 
+                    message = e.Message,
+                    errorCode = "USER_DELETED"
+                });
+            }
+        
+            if (e.Message.Contains("не найден"))
+            {
+                return NotFound(new { 
+                    message = e.Message,
+                    errorCode = "USER_NOT_FOUND"
+                });
+            }
+
+            return BadRequest(new { 
+                message = e.Message,
+                errorCode = "BAD_REQUEST"
+            });
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace Shared.Messaging.UserEvents;
 
-public class UserDeletedEvent
+public class UserRestoredEvent
 {
     public Guid UserId { get; set; }
 }

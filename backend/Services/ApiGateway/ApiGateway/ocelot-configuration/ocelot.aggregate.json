@@ -16,6 +16,18 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/gateway/user/{userId}",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamPathTemplate": "/aggregate/profile/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5123
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/gateway/post/{postId}",
       "UpstreamHttpMethod": ["Get"],
       "DownstreamPathTemplate": "/aggregate/posts/{postId}",

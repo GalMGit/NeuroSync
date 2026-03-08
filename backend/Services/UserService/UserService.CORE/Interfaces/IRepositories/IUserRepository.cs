@@ -5,4 +5,5 @@ namespace UserService.CORE.Interfaces.IRepositories;
 
 public interface IUserRepository : IRepository<User>
 {
+    Task RestoreUserAsync(Guid userId);
 }

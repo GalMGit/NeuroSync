@@ -21,8 +21,7 @@ public class UserRepository(
     {
         return await database.Users
             .FirstOrDefaultAsync(x =>
-                x.UserId == userId
-                && !x.IsDeleted);
+                x.UserId == userId);
     }
 
     public Task<IEnumerable<User>?> GetAllAsync()
@@ -38,16 +37,27 @@ public class UserRepository(
     public async Task SoftDeleteAsync(Guid id)
     {
         await database.Users
-            .Where(x => 
+            .Where(x =>
                 x.UserId == id
                 && !x.IsDeleted)
-            .ExecuteUpdateAsync(x => 
-                x.SetProperty(s => 
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
                     s.IsDeleted, true));
     }
 
     public Task ForceDeleteAsync(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task RestoreUserAsync(Guid userId)
+    {
+        await database.Users
+            .Where(x =>
+                x.UserId == userId
+                && x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, false));
     }
 }

@@ -6,4 +6,6 @@ namespace AggregateService.API.Services.Interfaces;
 public interface IUserServiceClient
 {
     Task<ServiceResponse<UserProfileResponse>> GetProfileAsync();
+    Task<ServiceResponse<UserProfileResponse>> GetUserByIdAsync(Guid userId);
+
 }

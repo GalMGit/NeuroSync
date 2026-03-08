@@ -1,53 +1,80 @@
 namespace AggregateService.API.DTOs.Errors;
 
-
 public class ServiceResponse<T>
 {
     public bool Success { get; set; }
-    public string Message { get; set; } = string.Empty;
-    public string? ErrorCode { get; set; }
     public T? Data { get; set; }
-    
-    public static ServiceResponse<T> Ok(T data, string message = "Success")
+    public string? ErrorMessage { get; set; }
+    public string? ErrorCode { get; set; }
+    public int StatusCode { get; set; }
+
+    public static ServiceResponse<T> Ok(T data)
     {
         return new ServiceResponse<T>
         {
             Success = true,
-            Message = message,
-            Data = data
+            Data = data,
+            StatusCode = 200
         };
     }
-    
-    public static ServiceResponse<T> Fail(string message, string errorCode = "ERROR")
+
+    public static ServiceResponse<T> Fail(string message, string errorCode, int statusCode = 500)
     {
         return new ServiceResponse<T>
         {
             Success = false,
-            Message = message,
+            ErrorMessage = message,
             ErrorCode = errorCode,
-            Data = default
+            StatusCode = statusCode
         };
     }
-    
+
+    public static ServiceResponse<T> NotFound(string message)
+    {
+        return new ServiceResponse<T>
+        {
+            Success = false,
+            ErrorMessage = message,
+            ErrorCode = "NOT_FOUND",
+            StatusCode = 404
+        };
+    }
+
+    public static ServiceResponse<T> UserDeleted(string message)
+    {
+        return new ServiceResponse<T>
+        {
+            Success = false,
+            ErrorMessage = message,
+            ErrorCode = "USER_DELETED",
+            StatusCode = 404
+        };
+    }
+
+    public static ServiceResponse<T> Unauthorized()
+    {
+        return new ServiceResponse<T>
+        {
+            Success = false,
+            ErrorMessage = "Необходима авторизация",
+            ErrorCode = "UNAUTHORIZED",
+            StatusCode = 401
+        };
+    }
+
     public static ServiceResponse<T> ServiceUnavailable(string serviceName)
     {
         return new ServiceResponse<T>
         {
             Success = false,
-            Message = $"Сервис {serviceName} временно недоступен",
+            ErrorMessage = $"Сервис {serviceName} временно недоступен",
             ErrorCode = "SERVICE_UNAVAILABLE",
-            Data = default
+            StatusCode = 503
         };
     }
-    
-    public static ServiceResponse<T> Timeout(string serviceName)
-    {
-        return new ServiceResponse<T>
-        {
-            Success = false,
-            Message = $"Сервис {serviceName} не отвечает",
-            ErrorCode = "TIMEOUT",
-            Data = default
-        };
-    }
+
+    public bool IsNotFound => StatusCode == 404 && ErrorCode == "NOT_FOUND";
+    public bool IsUserDeleted => StatusCode == 404 && ErrorCode == "USER_DELETED";
+    public bool IsUnauthorized => StatusCode == 401;
+    public bool IsServiceUnavailable => StatusCode == 503;
 }

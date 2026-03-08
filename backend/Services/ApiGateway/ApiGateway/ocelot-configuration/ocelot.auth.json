@@ -25,6 +25,18 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/gateway/restore",
+      "UpstreamHttpMethod": ["Patch"],
+      "DownstreamPathTemplate": "/api/auth/restore",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5235
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/gateway/user/delete/{userId}",
       "UpstreamHttpMethod": ["Delete"],
       "DownstreamPathTemplate": "/api/auth/delete/{userId}",
