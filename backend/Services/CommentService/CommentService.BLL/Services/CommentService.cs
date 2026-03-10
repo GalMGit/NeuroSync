@@ -50,4 +50,16 @@ public class CommentService(
 
         return mapper.Map<IEnumerable<CommentResponse>>(comments);
     }
+
+    public async Task SoftDeleteUserCommentsAsync(Guid userId)
+    {
+        await commentRepository
+            .SoftDeleteUserCommentsAsync(userId);
+    }
+
+    public async Task RestoreDeletesUserCommentsAsync(Guid userId)
+    {
+        await commentRepository
+            .RestoreDeletesUserCommentsAsync(userId);
+    }
 }

@@ -41,6 +41,36 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/posts/update/{postId}",
+      "UpstreamHttpMethod": ["Patch"],
+      "DownstreamPathTemplate": "/api/posts/update/{postId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5133
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/posts/delete/{postId}",
+      "UpstreamHttpMethod": ["Delete"],
+      "DownstreamPathTemplate": "/api/posts/delete/{postId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5133
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     }
   ]
 }

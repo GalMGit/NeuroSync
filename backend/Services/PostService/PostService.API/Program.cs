@@ -1,4 +1,6 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using PostService.BLL.Consumers;
 using PostService.BLL.Mappers;
 using PostService.CORE.Interfaces.IRepositories;
 using PostService.CORE.Interfaces.IServices;
@@ -8,6 +10,25 @@ using Shared.AuthExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<UserDeletedConsumer>();
+    x.AddConsumer<UserRestoredConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ReceiveEndpoint("post-user-deleted-queue", e =>
+        {
+            e.ConfigureConsumer<UserDeletedConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("post-user-restored-queue", e =>
+        {
+            e.ConfigureConsumer<UserRestoredConsumer>(context);
+        });
+    });
+});
 
 builder.Services.AddControllers();
 

@@ -12,6 +12,8 @@ public class PostService(
     IMapper mapper
     ) : IPostService
 {
+    private IPostService _postServiceImplementation;
+
     public async Task<PostResponse> CreateAsync(
         CreatePostRequest request,
         Guid userId)
@@ -63,5 +65,54 @@ public class PostService(
             .GetAllByCommunityAsync(communityId);
 
         return mapper.Map<IEnumerable<PostResponse>>(posts);
+    }
+
+    public async Task SoftDeleteUserPostsAsync(Guid userId)
+    {
+        await postRepository
+            .SoftDeleteUserPostsAsync(userId);
+    }
+
+    public async Task RestoreUserPostsAsync(Guid userId)
+    {
+        await postRepository
+            .RestoreUserPostsAsync(userId);
+    }
+
+    public async Task SoftDeleteAsync(Guid postId)
+    {
+        await postRepository
+            .SoftDeleteAsync(postId);
+    }
+
+    public async Task ForceDeleteAsync(Guid postId)
+    {
+        await postRepository
+            .ForceDeleteAsync(postId);
+    }
+
+    public async Task<PostResponse> UpdatePostAsync(
+        Guid postId,
+        UpdatePostRequest request)
+    {
+        var existsPost = await postRepository
+            .GetByIdAsync(postId) 
+                         ?? throw new Exception("Пост не найден");
+
+        if (!string.IsNullOrWhiteSpace(request.Title))
+            existsPost.Title = request.Title;
+        
+        if (!string.IsNullOrWhiteSpace(request.Description))
+            existsPost.Description = request.Description;
+        
+        existsPost.PosterUrl = request.PosterUrl;
+
+        existsPost.UpdatedAt = DateTime.UtcNow;
+
+        var updatedPost = await postRepository
+            .UpdateAsync(existsPost);
+
+        return mapper.Map<PostResponse>(updatedPost);
+
     }
 }

@@ -19,6 +19,7 @@ public class CommentRepository(
     public async Task<Comment?> GetByIdAsync(Guid id)
     {
         return await database.Comments
+            .AsNoTracking()
             .FirstOrDefaultAsync(x =>
                 x.Id == id
                 && !x.IsDeleted);
@@ -27,13 +28,14 @@ public class CommentRepository(
     public async Task<IEnumerable<Comment>?> GetAllAsync()
     {
         return await database.Comments
+            .AsNoTracking()
             .Where(x => !x.IsDeleted)
             .ToListAsync();
     }
 
-    public Task<Comment> UpdateAsync(Comment entity)
+    public async Task<Comment> UpdateAsync(Comment comment)
     {
-        throw new NotImplementedException();
+        await database.Comments.Update()
     }
 
     public Task SoftDeleteAsync(Guid id)
@@ -49,9 +51,32 @@ public class CommentRepository(
     public async Task<IEnumerable<Comment>?> GetAllByPostAsync(Guid postId)
     {
         return await database.Comments
+            .AsNoTracking()
             .Where(x =>
                 x.PostId == postId
                 && !x.IsDeleted)
             .ToListAsync();
+    }
+
+    public async Task SoftDeleteUserCommentsAsync(Guid userId)
+    {
+        await database.Comments
+            .Where(x =>
+                x.AuthorId == userId
+                && !x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, true));
+    }
+
+    public async Task RestoreDeletesUserCommentsAsync(Guid userId)
+    {
+        await database.Comments
+            .Where(x =>
+                x.AuthorId == userId
+                && x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, false));
     }
 }

@@ -10,4 +10,9 @@ public interface IPostService
     Task<IEnumerable<PostResponse>?> GetAllAsync();
     Task<IEnumerable<PostResponse>?> GetAllByUserAsync(Guid userId);
     Task<IEnumerable<PostResponse>?> GetAllByCommunityAsync(Guid communityId);
+    Task SoftDeleteUserPostsAsync(Guid userId);
+    Task RestoreUserPostsAsync(Guid userId);
+    Task SoftDeleteAsync(Guid postId);
+    Task ForceDeleteAsync(Guid postId);
+    Task<PostResponse> UpdatePostAsync(Guid postId, UpdatePostRequest request);
 }

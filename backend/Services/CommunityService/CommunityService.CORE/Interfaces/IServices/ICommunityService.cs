@@ -12,4 +12,6 @@ public interface ICommunityService
     Task<CommunityResponse?> GetByIdAsync(Guid id);
     Task<IEnumerable<CommunityResponse>?> GetAllAsync();
     Task<IEnumerable<CommunityResponse>?> GetAllByUserAsync(Guid userId);
+    Task SoftDeleteUserCommunities(Guid userId);
+    Task RestoreDeletedUserCommunities(Guid userId);
 }

@@ -1,12 +1,35 @@
+using CommentService.BLL.Consumers;
 using CommentService.BLL.Mappers;
 using CommentService.CORE.Interfaces.IRepositories;
 using CommentService.CORE.Interfaces.IServices;
 using CommentService.DAL.Database.DatabaseContext;
 using CommentService.DAL.Repositories;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Shared.AuthExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<UserDeletedConsumer>();
+    x.AddConsumer<UserRestoredConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ReceiveEndpoint("comment-user-deleted-queue", e =>
+        {
+            e.ConfigureConsumer<UserDeletedConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("comment-user-restored-queue", e =>
+        {
+            e.ConfigureConsumer<UserRestoredConsumer>(context);
+        });
+
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

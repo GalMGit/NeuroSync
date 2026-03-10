@@ -27,7 +27,7 @@ public class CommunityService(
             OwnerId = userId,
             OwnerName = username
         };
-        
+
         community.CommunityMembers.Add(new CommunityMember
         {
             Id = Guid.NewGuid(),
@@ -66,5 +66,17 @@ public class CommunityService(
             .GetAllByUserAsync(userId);
 
         return mapper.Map<IEnumerable<CommunityResponse>>(communities);
+    }
+
+    public async Task SoftDeleteUserCommunities(Guid userId)
+    {
+        await communityRepository
+            .SoftDeleteUserCommunities(userId);
+    }
+
+    public async Task RestoreDeletedUserCommunities(Guid userId)
+    {
+        await communityRepository
+            .RestoreDeletedUserCommunities(userId);
     }
 }

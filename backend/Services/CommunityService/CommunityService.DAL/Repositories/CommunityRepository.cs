@@ -51,8 +51,30 @@ public class CommunityRepository(
         return await database.Communities
             .Include(x => x.CommunityMembers)
             .Where(x => x.CommunityMembers
-                .Any(c => 
+                .Any(c =>
                     c.UserId == userId))
             .ToListAsync();
+    }
+
+    public async Task SoftDeleteUserCommunities(Guid userId)
+    {
+        await database.Communities
+            .Where(x =>
+                x.OwnerId == userId
+                && !x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, true));
+    }
+
+    public async Task RestoreDeletedUserCommunities(Guid userId)
+    {
+        await database.Communities
+            .Where(x =>
+                x.OwnerId == userId
+                && x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, false));
     }
 }

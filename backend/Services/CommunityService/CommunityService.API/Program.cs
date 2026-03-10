@@ -1,13 +1,34 @@
+using CommunityService.BLL.Consumers;
 using CommunityService.BLL.Mappers;
 using CommunityService.CORE.Interfaces.IRepositories;
 using CommunityService.CORE.Interfaces.IServices;
 using CommunityService.DAL.Database.DatabaseContext;
 using CommunityService.DAL.Repositories;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Shared.AuthExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<UserDeletedConsumer>();
+    x.AddConsumer<UserRestoredConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ReceiveEndpoint("community-user-deleted-queue", e =>
+        {
+            e.ConfigureConsumer<UserDeletedConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("community-user-restored-queue", e =>
+        {
+            e.ConfigureConsumer<UserRestoredConsumer>(context);
+        });
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
