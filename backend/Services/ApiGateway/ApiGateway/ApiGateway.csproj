@@ -4,6 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,6 +24,12 @@
       <_ContentIncludedByDefault Remove="ocelot\ocelot.global.json" />
       <_ContentIncludedByDefault Remove="ocelot\ocelot.posts.json" />
       <_ContentIncludedByDefault Remove="ocelot\ocelot.user.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
     

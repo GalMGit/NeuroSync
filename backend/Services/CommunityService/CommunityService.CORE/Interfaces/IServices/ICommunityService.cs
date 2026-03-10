@@ -10,8 +10,8 @@ public interface ICommunityService
         Guid userId,
         string username);
     Task<CommunityResponse?> GetByIdAsync(Guid id);
-    Task<IEnumerable<CommunityResponse>?> GetAllAsync();
-    Task<IEnumerable<CommunityResponse>?> GetAllByUserAsync(Guid userId);
+    Task<List<CommunityResponse>> GetAllAsync();
+    Task<List<CommunityResponse>> GetAllByUserAsync(Guid userId);
     Task SoftDeleteUserCommunities(Guid userId);
     Task RestoreDeletedUserCommunities(Guid userId);
 }

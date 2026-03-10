@@ -25,7 +25,7 @@ public class CommentRepository(
                 && !x.IsDeleted);
     }
 
-    public async Task<IEnumerable<Comment>?> GetAllAsync()
+    public async Task<List<Comment>> GetAllAsync()
     {
         return await database.Comments
             .AsNoTracking()
@@ -35,7 +35,7 @@ public class CommentRepository(
 
     public async Task<Comment> UpdateAsync(Comment comment)
     {
-        await database.Comments.Update()
+        throw new NotImplementedException();
     }
 
     public Task SoftDeleteAsync(Guid id)
@@ -48,7 +48,7 @@ public class CommentRepository(
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<Comment>?> GetAllByPostAsync(Guid postId)
+    public async Task<List<Comment>> GetAllByPostAsync(Guid postId)
     {
         return await database.Comments
             .AsNoTracking()

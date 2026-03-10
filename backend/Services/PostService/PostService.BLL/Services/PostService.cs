@@ -12,8 +12,6 @@ public class PostService(
     IMapper mapper
     ) : IPostService
 {
-    private IPostService _postServiceImplementation;
-
     public async Task<PostResponse> CreateAsync(
         CreatePostRequest request,
         Guid userId)
@@ -43,28 +41,28 @@ public class PostService(
         return mapper.Map<PostResponse>(post);
     }
 
-    public async Task<IEnumerable<PostResponse>?> GetAllAsync()
+    public async Task<List<PostResponse>> GetAllAsync()
     {
         var posts = await postRepository
             .GetAllAsync();
 
-        return mapper.Map<IEnumerable<PostResponse>>(posts);
+        return mapper.Map<List<PostResponse>>(posts);
     }
 
-    public async Task<IEnumerable<PostResponse>?> GetAllByUserAsync(Guid userId)
+    public async Task<List<PostResponse>> GetAllByUserAsync(Guid userId)
     {
         var posts = await postRepository
             .GetAllByUserAsync(userId);
 
-        return mapper.Map<IEnumerable<PostResponse>>(posts);
+        return mapper.Map<List<PostResponse>>(posts);
     }
 
-    public async Task<IEnumerable<PostResponse>?> GetAllByCommunityAsync(Guid communityId)
+    public async Task<List<PostResponse>> GetAllByCommunityAsync(Guid communityId)
     {
         var posts = await postRepository
             .GetAllByCommunityAsync(communityId);
 
-        return mapper.Map<IEnumerable<PostResponse>>(posts);
+        return mapper.Map<List<PostResponse>>(posts);
     }
 
     public async Task SoftDeleteUserPostsAsync(Guid userId)
@@ -96,15 +94,15 @@ public class PostService(
         UpdatePostRequest request)
     {
         var existsPost = await postRepository
-            .GetByIdAsync(postId) 
+            .GetByIdAsync(postId)
                          ?? throw new Exception("Пост не найден");
 
         if (!string.IsNullOrWhiteSpace(request.Title))
             existsPost.Title = request.Title;
-        
+
         if (!string.IsNullOrWhiteSpace(request.Description))
             existsPost.Description = request.Description;
-        
+
         existsPost.PosterUrl = request.PosterUrl;
 
         existsPost.UpdatedAt = DateTime.UtcNow;

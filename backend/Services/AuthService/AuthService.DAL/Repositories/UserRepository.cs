@@ -25,7 +25,7 @@ public class UserRepository(
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public Task<IEnumerable<User>?> GetAllAsync()
+    public Task<List<User>> GetAllAsync()
     {
         throw new NotImplementedException();
     }

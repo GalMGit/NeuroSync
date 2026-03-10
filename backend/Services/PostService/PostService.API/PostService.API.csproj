@@ -4,6 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,6 +25,11 @@
         <ProjectReference Include="..\PostService.BLL\PostService.BLL.csproj" />
         <ProjectReference Include="..\PostService.CORE\PostService.CORE.csproj" />
         <ProjectReference Include="..\PostService.DAL\PostService.DAL.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

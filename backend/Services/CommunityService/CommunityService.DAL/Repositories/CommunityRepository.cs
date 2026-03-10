@@ -24,7 +24,7 @@ public class CommunityRepository(
                 && !x.IsDeleted);
     }
 
-    public async Task<IEnumerable<Community>?> GetAllAsync()
+    public async Task<List<Community>> GetAllAsync()
     {
         return await database.Communities
             .Where(x => !x.IsDeleted)
@@ -46,7 +46,7 @@ public class CommunityRepository(
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<Community>?> GetAllByUserAsync(Guid userId)
+    public async Task<List<Community>> GetAllByUserAsync(Guid userId)
     {
         return await database.Communities
             .Include(x => x.CommunityMembers)

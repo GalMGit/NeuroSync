@@ -5,8 +5,8 @@ namespace PostService.CORE.Interfaces.IRepositories;
 
 public interface IPostRepository : IRepository<Post>
 {
-    Task<IEnumerable<Post>?> GetAllByUserAsync(Guid userId);
-    Task<IEnumerable<Post>?> GetAllByCommunityAsync(Guid communityId);
+    Task<List<Post>> GetAllByUserAsync(Guid userId);
+    Task<List<Post>> GetAllByCommunityAsync(Guid communityId);
     Task SoftDeleteUserPostsAsync(Guid userId);
     Task RestoreUserPostsAsync(Guid userId);
 }

@@ -4,6 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,6 +25,11 @@
         <ProjectReference Include="..\CommentService.BLL\CommentService.BLL.csproj" />
         <ProjectReference Include="..\CommentService.CORE\CommentService.CORE.csproj" />
         <ProjectReference Include="..\CommentService.DAL\CommentService.DAL.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

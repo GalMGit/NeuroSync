@@ -25,7 +25,7 @@ public class PostRepository(
                 && !x.IsDeleted);
     }
 
-    public async Task<IEnumerable<Post>?> GetAllAsync()
+    public async Task<List<Post>> GetAllAsync()
     {
         return await database.Posts
             .AsNoTracking()
@@ -56,7 +56,7 @@ public class PostRepository(
             .ExecuteDeleteAsync();
     }
 
-    public async Task<IEnumerable<Post>?> GetAllByUserAsync(Guid userId)
+    public async Task<List<Post>> GetAllByUserAsync(Guid userId)
     {
         return await database.Posts
             .AsNoTracking()
@@ -66,7 +66,7 @@ public class PostRepository(
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Post>?> GetAllByCommunityAsync(Guid communityId)
+    public async Task<List<Post>> GetAllByCommunityAsync(Guid communityId)
     {
         return await database.Posts
             .AsNoTracking()

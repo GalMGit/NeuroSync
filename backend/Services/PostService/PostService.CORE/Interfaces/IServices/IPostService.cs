@@ -7,9 +7,9 @@ public interface IPostService
 {
     Task<PostResponse> CreateAsync(CreatePostRequest request, Guid userId);
     Task<PostResponse?> GetByIdAsync(Guid id);
-    Task<IEnumerable<PostResponse>?> GetAllAsync();
-    Task<IEnumerable<PostResponse>?> GetAllByUserAsync(Guid userId);
-    Task<IEnumerable<PostResponse>?> GetAllByCommunityAsync(Guid communityId);
+    Task<List<PostResponse>> GetAllAsync();
+    Task<List<PostResponse>> GetAllByUserAsync(Guid userId);
+    Task<List<PostResponse>> GetAllByCommunityAsync(Guid communityId);
     Task SoftDeleteUserPostsAsync(Guid userId);
     Task RestoreUserPostsAsync(Guid userId);
     Task SoftDeleteAsync(Guid postId);

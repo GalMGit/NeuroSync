@@ -4,6 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,6 +27,11 @@
       <ProjectReference Include="..\CommunityService.BLL\CommunityService.BLL.csproj" />
       <ProjectReference Include="..\CommunityService.CORE\CommunityService.CORE.csproj" />
       <ProjectReference Include="..\CommunityService.DAL\CommunityService.DAL.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

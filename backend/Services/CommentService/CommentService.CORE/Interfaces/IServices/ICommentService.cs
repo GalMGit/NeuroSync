@@ -10,8 +10,8 @@ public interface ICommentService
         Guid userId,
         string username);
     Task<CommentResponse?> GetByIdAsync(Guid id);
-    Task<IEnumerable<CommentResponse>?> GetAllAsync();
-    Task<IEnumerable<CommentResponse>?> GetAllByPostAsync(Guid postId);
+    Task<List<CommentResponse>> GetAllAsync();
+    Task<List<CommentResponse>> GetAllByPostAsync(Guid postId);
     Task SoftDeleteUserCommentsAsync(Guid userId);
     Task RestoreDeletesUserCommentsAsync(Guid userId);
 }

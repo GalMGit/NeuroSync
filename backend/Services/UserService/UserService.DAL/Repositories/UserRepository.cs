@@ -24,7 +24,7 @@ public class UserRepository(
                 x.UserId == userId);
     }
 
-    public Task<IEnumerable<User>?> GetAllAsync()
+    public Task<List<User>> GetAllAsync()
     {
         throw new NotImplementedException();
     }

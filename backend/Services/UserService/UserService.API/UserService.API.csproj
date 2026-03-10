@@ -4,6 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,6 +27,12 @@
       <ProjectReference Include="..\UserService.DAL\UserService.DAL.csproj" />
         <ProjectReference Include="../../../Shared/Shared.AuthExtensions/Shared.AuthExtensions.csproj"/>
         <ProjectReference Include="../../../Shared/Shared.WebApi/Shared.WebApi.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
     
 

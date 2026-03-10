@@ -38,17 +38,17 @@ public class CommentService(
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<CommentResponse>?> GetAllAsync()
+    public Task<List<CommentResponse>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<CommentResponse>?> GetAllByPostAsync(Guid postId)
+    public async Task<List<CommentResponse>> GetAllByPostAsync(Guid postId)
     {
         var comments = await commentRepository
             .GetAllByPostAsync(postId);
 
-        return mapper.Map<IEnumerable<CommentResponse>>(comments);
+        return mapper.Map<List<CommentResponse>>(comments);
     }
 
     public async Task SoftDeleteUserCommentsAsync(Guid userId)

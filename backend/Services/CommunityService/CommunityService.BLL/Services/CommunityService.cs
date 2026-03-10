@@ -52,20 +52,20 @@ public class CommunityService(
         return mapper.Map<CommunityResponse>(community);
     }
 
-    public async Task<IEnumerable<CommunityResponse>?> GetAllAsync()
+    public async Task<List<CommunityResponse>> GetAllAsync()
     {
         var communities = await communityRepository
             .GetAllAsync();
 
-        return mapper.Map<IEnumerable<CommunityResponse>>(communities);
+        return mapper.Map<List<CommunityResponse>>(communities);
     }
 
-    public async Task<IEnumerable<CommunityResponse>?> GetAllByUserAsync(Guid userId)
+    public async Task<List<CommunityResponse>> GetAllByUserAsync(Guid userId)
     {
         var communities = await communityRepository
             .GetAllByUserAsync(userId);
 
-        return mapper.Map<IEnumerable<CommunityResponse>>(communities);
+        return mapper.Map<List<CommunityResponse>>(communities);
     }
 
     public async Task SoftDeleteUserCommunities(Guid userId)
