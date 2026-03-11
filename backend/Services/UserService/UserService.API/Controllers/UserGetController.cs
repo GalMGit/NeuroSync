@@ -24,11 +24,21 @@ public class UserGetController(
         }
         catch (UnauthorizedAccessException)
         {
-            return Unauthorized();
+            return Problem(
+                title: "Не авторизован",
+                detail: "Требуется авторизация для доступа к профилю",
+                statusCode: StatusCodes.Status401Unauthorized,
+                instance: HttpContext.Request.Path
+            );
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return Problem(
+                title: "Ошибка получения профиля",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest,
+                instance: HttpContext.Request.Path
+            );
         }
     }
     
@@ -39,43 +49,42 @@ public class UserGetController(
         {
             var profile = await userService
                 .GetUserProfileAsync(userId);
-
-            if (profile == null)
-            {
-                return NotFound(new { 
-                    message = "Пользователь не найден",
-                    errorCode = "USER_NOT_FOUND" 
-                });
-            }
-
+            
             return Ok(profile);
         }
         catch (UnauthorizedAccessException)
         {
-            return Unauthorized();
+            return Problem(
+                title: "Доступ запрещен",
+                detail: "У вас нет прав на просмотр этого профиля",
+                statusCode: StatusCodes.Status403Forbidden,
+                instance: HttpContext.Request.Path
+            );
         }
         catch (Exception e)
         {
-            if (e.Message.Contains("удален"))
+            var (statusCode, title) = e.Message switch
             {
-                return NotFound(new { 
-                    message = e.Message,
-                    errorCode = "USER_DELETED"
-                });
-            }
-        
-            if (e.Message.Contains("не найден"))
-            {
-                return NotFound(new { 
-                    message = e.Message,
-                    errorCode = "USER_NOT_FOUND"
-                });
-            }
+                var msg when msg.Contains("удален") => (
+                    StatusCodes.Status404NotFound,
+                    "Профиль удален"
+                ),
+                var msg when msg.Contains("не найден") => (
+                    StatusCodes.Status404NotFound,
+                    "Профиль не найден"
+                ),
+                _ => (
+                    StatusCodes.Status400BadRequest,
+                    "Ошибка получения профиля"
+                )
+            };
 
-            return BadRequest(new { 
-                message = e.Message,
-                errorCode = "BAD_REQUEST"
-            });
+            return Problem(
+                title: title,
+                detail: e.Message,
+                statusCode: statusCode,
+                instance: HttpContext.Request.Path
+            );
         }
     }
 }

@@ -5,5 +5,5 @@ namespace AggregateService.API.Services.Interfaces;
 
 public interface ICommentServiceClient
 {
-    Task<ServiceResponse<IEnumerable<CommentResponse>>> GetCommentsByPostAsync(Guid postId);
+    Task<IEnumerable<CommentResponse>> GetCommentsByPostAsync(Guid postId);
 }

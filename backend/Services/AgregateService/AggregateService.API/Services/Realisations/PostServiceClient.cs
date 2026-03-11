@@ -1,19 +1,21 @@
 using System.Net;
 using System.Net.Sockets;
-using AggregateService.API.DTOs.Errors;
+using System.Text.Json;
+using AggregateService.API.Extensions.Exceptions;
 using AggregateService.API.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.Post.Responses;
 
 namespace AggregateService.API.Services.Realisations;
 
 public class PostServiceClient(
     IHttpClientFactory clientFactory
-    ) : IPostServiceClient
+) : IPostServiceClient
 {
-    private readonly HttpClient _httpClient =
-        clientFactory.CreateClient("PostService");
+    private readonly HttpClient _httpClient = clientFactory
+        .CreateClient("PostService");
 
-    public async Task<ServiceResponse<IEnumerable<PostResponse>>> GetUserPostsAsync()
+    public async Task<IEnumerable<PostResponse>> GetUserPostsAsync()
     {
         try
         {
@@ -22,25 +24,31 @@ public class PostServiceClient(
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content
-                    .ReadFromJsonAsync<IEnumerable<PostResponse>>();
-
-                return ServiceResponse<IEnumerable<PostResponse>>
-                    .Ok(result ?? []);
+                return await response.Content
+                    .ReadFromJsonAsync<IEnumerable<PostResponse>>()
+                       ?? [];
             }
 
-            return ServiceResponse<IEnumerable<PostResponse>>
-                .Ok([]);
+            var problem = await response.Content
+                .ReadFromJsonAsync<ProblemDetails>();
+
+            throw new ServiceException(
+                problem?.Detail ?? "Ошибка при получении постов пользователя",
+                problem?.Title ?? "PostServiceError",
+                response.StatusCode
+            );
         }
-        catch (HttpRequestException ex)
-            when (ex.InnerException is SocketException)
+        catch (HttpRequestException ex) when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<IEnumerable<PostResponse>>
-                .ServiceUnavailable("постов");
+            throw new ServiceException(
+                "Сервис постов временно недоступен",
+                "ServiceUnavailable",
+                HttpStatusCode.ServiceUnavailable
+            );
         }
     }
 
-    public async Task<ServiceResponse<IEnumerable<PostResponse>>> GetPostsByCommunityAsync(Guid communityId)
+    public async Task<IEnumerable<PostResponse>> GetPostsByCommunityAsync(Guid communityId)
     {
         try
         {
@@ -49,25 +57,31 @@ public class PostServiceClient(
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content
-                    .ReadFromJsonAsync<IEnumerable<PostResponse>>();
-
-                return ServiceResponse<IEnumerable<PostResponse>>
-                    .Ok(result ?? []);
+                return await response.Content
+                    .ReadFromJsonAsync<IEnumerable<PostResponse>>()
+                       ?? [];
             }
 
-            return ServiceResponse<IEnumerable<PostResponse>>
-                .Ok([]);
+            var problem = await response.Content
+                .ReadFromJsonAsync<ProblemDetails>();
+
+            throw new ServiceException(
+                problem?.Detail ?? $"Ошибка при получении постов сообщества {communityId}",
+                problem?.Title ?? "PostServiceError",
+                response.StatusCode
+            );
         }
-        catch (HttpRequestException ex)
-            when (ex.InnerException is SocketException)
+        catch (HttpRequestException ex) when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<IEnumerable<PostResponse>>
-                .ServiceUnavailable("постов");
+            throw new ServiceException(
+                "Сервис постов временно недоступен",
+                "ServiceUnavailable",
+                HttpStatusCode.ServiceUnavailable
+            );
         }
     }
 
-    public async Task<ServiceResponse<PostResponse>> GetPostByIdAsync(Guid postId)
+    public async Task<PostResponse?> GetPostByIdAsync(Guid postId)
     {
         try
         {
@@ -76,27 +90,31 @@ public class PostServiceClient(
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content
+                return await response.Content
                     .ReadFromJsonAsync<PostResponse>();
-
-                return ServiceResponse<PostResponse>
-                    .Ok(result!);
             }
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                return ServiceResponse<PostResponse>
-                    .Fail("Пост не найден", "NOT_FOUND");
+                return null;
             }
 
-            return ServiceResponse<PostResponse>
-                .Fail("Ошибка при получении поста", "POST_SERVICE_ERROR");
+            var problem = await response.Content
+                .ReadFromJsonAsync<ProblemDetails>();
+
+            throw new ServiceException(
+                problem?.Detail ?? $"Ошибка при получении поста {postId}",
+                problem?.Title ?? "PostServiceError",
+                response.StatusCode
+            );
         }
-        catch (HttpRequestException ex)
-            when (ex.InnerException is SocketException)
+        catch (HttpRequestException ex) when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<PostResponse>
-                .ServiceUnavailable("постов");
+            throw new ServiceException(
+                "Сервис постов временно недоступен",
+                "ServiceUnavailable",
+                HttpStatusCode.ServiceUnavailable
+            );
         }
     }
 }

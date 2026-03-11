@@ -1,10 +1,16 @@
 using System.Net;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ApiGateway.Extensions;
 
 public class DownstreamErrorHandler : DelegatingHandler
 {
+    private static readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
         CancellationToken cancellationToken)
@@ -16,17 +22,21 @@ public class DownstreamErrorHandler : DelegatingHandler
         catch (HttpRequestException ex)
             when (ex.InnerException is System.Net.Sockets.SocketException)
         {
-            var response = new HttpResponseMessage(HttpStatusCode.BadGateway)
+            var problemDetails = new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.6.4",
+                Title = "ServiceUnavailable",
+                Status = StatusCodes.Status503ServiceUnavailable,
+                Detail = "Сервис временно недоступен",
+                Instance = request.RequestUri?.PathAndQuery ?? "/"
+            };
+
+            var response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
             {
                 Content = new StringContent(
-                    JsonSerializer.Serialize(new
-                    {
-                        success = false,
-                        message = "Сервис временно недоступен",
-                        data = Array.Empty<object>()
-                    }),
+                    JsonSerializer.Serialize(problemDetails, _jsonOptions),
                     System.Text.Encoding.UTF8,
-                    "application/json"
+                    "application/problem+json"
                 )
             };
 

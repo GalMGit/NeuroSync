@@ -1,4 +1,6 @@
 using System;
+using System.Security.Claims;
+using AuthService.API.Extensions;
 using AuthService.CORE.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using NeuroSync.MinimalApi.Endpoints;
@@ -11,15 +13,18 @@ public class DeleteEndpoints : IEndpoint
     {
         var group = app.MapGroup("api/auth");
 
-        group.MapDelete("delete/{userId:guid}", Delete);
+        group.MapDelete("delete", Delete)
+            .RequireAuthorization();
     }
 
     private async Task<IResult> Delete(
-        IUserService userService,
-        [FromRoute] Guid userId)
+        ClaimsPrincipal claims,
+        IUserService userService)
     {
         try
         {
+            var userId = claims.GetUserId();
+            
             await userService
                 .SoftDeleteAsync(userId);
 

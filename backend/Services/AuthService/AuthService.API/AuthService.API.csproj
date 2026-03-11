@@ -27,6 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AuthService.BLL\AuthService.BLL.csproj" />
+        <ProjectReference Include="../../../Shared/Shared.AuthExtensions/Shared.AuthExtensions.csproj" />
       <ProjectReference Include="..\AuthService.CORE\AuthService.CORE.csproj" />
       <ProjectReference Include="..\AuthService.DAL\AuthService.DAL.csproj" />
     </ItemGroup>

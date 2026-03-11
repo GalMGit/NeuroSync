@@ -37,16 +37,19 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/user/delete/{userId}",
+      "UpstreamPathTemplate": "/gateway/user/delete",
       "UpstreamHttpMethod": ["Delete"],
-      "DownstreamPathTemplate": "/api/auth/delete/{userId}",
+      "DownstreamPathTemplate": "/api/auth/delete",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 5235
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     }
   ]
 }

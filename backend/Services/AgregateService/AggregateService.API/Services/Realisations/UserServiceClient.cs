@@ -2,7 +2,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text.Json;
 using AggregateService.API.DTOs.Errors;
+using AggregateService.API.Extensions.Exceptions;
 using AggregateService.API.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.User.Responses;
 
 namespace AggregateService.API.Services.Realisations;
@@ -14,7 +16,7 @@ public class UserServiceClient(
     private readonly HttpClient _httpClient =
         clientFactory.CreateClient("UserService");
 
-    public async Task<ServiceResponse<UserProfileResponse>> GetProfileAsync()
+    public async Task<UserProfileResponse> GetProfileAsync()
     {
         try
         {
@@ -23,149 +25,65 @@ public class UserServiceClient(
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content
-                    .ReadFromJsonAsync<UserProfileResponse>();
-                return ServiceResponse<UserProfileResponse>.Ok(result!);
-            }
-
-            var errorContent = await response.Content
-                .ReadAsStringAsync();
-
-            var (message, errorCode) = ParseErrorResponse(errorContent);
-
-            switch (response.StatusCode)
-            {
-                case HttpStatusCode.NotFound:
-                    if (errorCode == "USER_DELETED")
-                    {
-                        return ServiceResponse<UserProfileResponse>.UserDeleted(
-                            message ?? "Пользователь был удален"
-                        );
-                    }
-                    return ServiceResponse<UserProfileResponse>.NotFound(
-                        message ?? "Пользователь не найден"
-                    );
-
-                case HttpStatusCode.Unauthorized:
-                    return ServiceResponse<UserProfileResponse>.Unauthorized();
-
-                case HttpStatusCode.BadRequest:
-                    return ServiceResponse<UserProfileResponse>.Fail(
-                        message ?? "Ошибка запроса",
-                        errorCode ?? "BAD_REQUEST"
-                    );
-
-                default:
-                    return ServiceResponse<UserProfileResponse>.Fail(
-                        message ?? "Не удалось получить профиль пользователя",
-                        errorCode ?? "USER_SERVICE_ERROR"
+                return await response.Content
+                    .ReadFromJsonAsync<UserProfileResponse>()
+                    ?? throw new ServiceException(
+                        "Пустой ответ от сервиса пользователей",
+                        "EmptyResponse",
+                        HttpStatusCode.InternalServerError
                     );
             }
+
+            var problem = await response.Content
+                .ReadFromJsonAsync<ProblemDetails>();
+
+            throw new ServiceException(
+                problem?.Detail ?? "Ошибка при получении профиля",
+                problem?.Title ?? "UserServiceError",
+                response.StatusCode
+            );
         }
         catch (HttpRequestException ex)
             when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<UserProfileResponse>
-                .ServiceUnavailable("пользователей");
-        }
-        catch (Exception)
-        {
-            return ServiceResponse<UserProfileResponse>.Fail(
-                "Внутренняя ошибка при получении профиля",
-                "INTERNAL_ERROR"
+            throw new ServiceException(
+                "Сервис пользователей временно недоступен",
+                "ServiceUnvailable",
+                HttpStatusCode.ServiceUnavailable
             );
         }
     }
 
-    public async Task<ServiceResponse<UserProfileResponse>> GetUserByIdAsync(Guid userId)
+        public async Task<UserProfileResponse> GetUserByIdAsync(Guid userId)
     {
         try
         {
-            var response = await _httpClient
-                .GetAsync($"/api/user/{userId}");
+            var response = await _httpClient.GetAsync($"/api/user/{userId}");
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content
-                    .ReadFromJsonAsync<UserProfileResponse>();
-                return ServiceResponse<UserProfileResponse>.Ok(result!);
+                return await response.Content.ReadFromJsonAsync<UserProfileResponse>()
+                       ?? throw new ServiceException(
+                           "Пустой ответ от сервиса пользователей",
+                           "EmptyResponse",
+                           HttpStatusCode.InternalServerError);
             }
 
-            var errorContent = await response.Content
-                .ReadAsStringAsync();
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
 
-            var (message, errorCode) = ParseErrorResponse(errorContent);
-
-            switch (response.StatusCode)
-            {
-                case HttpStatusCode.NotFound:
-                    if (errorCode == "USER_DELETED")
-                    {
-                        return ServiceResponse<UserProfileResponse>.UserDeleted(
-                            message ?? "Пользователь был удален"
-                        );
-                    }
-                    return ServiceResponse<UserProfileResponse>.NotFound(
-                        message ?? "Пользователь не найден"
-                    );
-
-                case HttpStatusCode.Unauthorized:
-                    return ServiceResponse<UserProfileResponse>.Unauthorized();
-
-                case HttpStatusCode.BadRequest:
-                    return ServiceResponse<UserProfileResponse>.Fail(
-                        message ?? "Ошибка запроса",
-                        errorCode ?? "BAD_REQUEST"
-                    );
-
-                default:
-                    return ServiceResponse<UserProfileResponse>.Fail(
-                        message ?? "Не удалось получить профиль пользователя",
-                        errorCode ?? "USER_SERVICE_ERROR"
-                    );
-            }
-        }
-        catch (HttpRequestException ex)
-            when (ex.InnerException is SocketException)
-        {
-            return ServiceResponse<UserProfileResponse>
-                .ServiceUnavailable("пользователей");
-        }
-        catch (Exception)
-        {
-            return ServiceResponse<UserProfileResponse>.Fail(
-                "Внутренняя ошибка при получении профиля",
-                "INTERNAL_ERROR"
+            throw new ServiceException(
+                problem?.Detail ?? "Ошибка при получении пользователя",
+                problem?.Title ?? "UserServiceError",
+                response.StatusCode
             );
         }
-    }
-
-    private (string? message, string? errorCode) ParseErrorResponse(string errorContent)
-    {
-        if (string.IsNullOrEmpty(errorContent))
-            return (null, null);
-
-        try
+        catch (HttpRequestException ex) when (ex.InnerException is SocketException)
         {
-            using var doc = JsonDocument.Parse(errorContent);
-            string? message = null;
-            string? errorCode = null;
-
-            if (doc.RootElement.TryGetProperty("message", out var messageElement))
-            {
-                message = messageElement.GetString();
-            }
-
-            if (doc.RootElement.TryGetProperty("errorCode", out var errorCodeElement))
-            {
-                errorCode = errorCodeElement.GetString();
-            }
-
-            return (message, errorCode);
-        }
-        catch
-        {
-            return (errorContent, null);
+            throw new ServiceException(
+                "Сервис пользователей временно недоступен",
+                "ServiceUnavailable",
+                HttpStatusCode.ServiceUnavailable
+            );
         }
     }
 }

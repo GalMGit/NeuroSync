@@ -159,7 +159,7 @@
         }
       ],
       "DownstreamHttpMethod": null,
-      "DownstreamPathTemplate": "/api/auth/delete/{userId}",
+      "DownstreamPathTemplate": "/api/auth/delete",
       "FileCacheOptions": null,
       "Priority": 1,
       "RequestIdKey": null,
@@ -176,8 +176,15 @@
       "UpstreamHttpMethod": [
         "Delete"
       ],
-      "UpstreamPathTemplate": "/gateway/user/delete/{userId}",
-      "AuthenticationOptions": null,
+      "UpstreamPathTemplate": "/gateway/user/delete",
+      "AuthenticationOptions": {
+        "AllowedScopes": null,
+        "AllowAnonymous": null,
+        "AuthenticationProviderKey": "Bearer",
+        "AuthenticationProviderKeys": null,
+        "HasScheme": true,
+        "HasScope": false
+      },
       "CacheOptions": null,
       "DownstreamHttpVersionPolicy": null,
       "DownstreamHttpVersion": null,

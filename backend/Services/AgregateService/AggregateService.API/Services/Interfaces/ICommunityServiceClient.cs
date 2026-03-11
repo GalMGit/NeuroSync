@@ -6,5 +6,5 @@ namespace AggregateService.API.Services.Interfaces;
 
 public interface ICommunityServiceClient
 {
-    Task<ServiceResponse<CommunityResponse>> GetCommunityAsync(Guid communityId);
+    Task<CommunityResponse> GetCommunityAsync(Guid communityId);
 }

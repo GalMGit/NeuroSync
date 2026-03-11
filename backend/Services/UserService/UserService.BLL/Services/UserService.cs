@@ -20,7 +20,6 @@ public class UserService(
             CreatedAt = DateTime.UtcNow,
             DisplayName = @event.Username,
             UserId = @event.UserId,
-            PostCount = 0
         };
 
         await userRepository

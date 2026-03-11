@@ -77,8 +77,15 @@ public class PostService(
             .RestoreUserPostsAsync(userId);
     }
 
-    public async Task SoftDeleteAsync(Guid postId)
+    public async Task SoftDeleteAsync(Guid postId, Guid userId)
     {
+        var post = await postRepository
+                       .GetByIdAsync(postId)
+                   ?? throw new Exception("Пост не найден");
+        
+        if (post.AuthorId != userId)
+            throw new UnauthorizedAccessException();
+        
         await postRepository
             .SoftDeleteAsync(postId);
     }

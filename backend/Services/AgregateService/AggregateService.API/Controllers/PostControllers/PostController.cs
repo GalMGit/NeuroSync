@@ -1,6 +1,8 @@
 using AggregateService.API.DTOs;
+using AggregateService.API.Extensions.Exceptions;
 using AggregateService.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.DTOs.Comment.Responses;
 using Shared.WebApi;
 
 namespace AggregateService.API.Controllers.PostControllers;
@@ -9,51 +11,62 @@ namespace AggregateService.API.Controllers.PostControllers;
 [Route("aggregate/posts")]
 public class PostController(
     IPostServiceClient postServiceClient,
-    ICommentServiceClient commentServiceClient
+    ICommentServiceClient commentServiceClient,
+    ILogger<PostController> logger
 ) : BaseController
 {
     [HttpGet("{postId:guid}")]
     public async Task<IActionResult> GetPostWithCommentsAsync(Guid postId)
     {
-        var postTask = postServiceClient.GetPostByIdAsync(postId);
-        var commentsTask = commentServiceClient.GetCommentsByPostAsync(postId);
-
-        await Task.WhenAll(postTask, commentsTask);
-
-        var postResult = postTask.Result;
-        var commentsResult = commentsTask.Result;
-
-        if (!postResult.Success && postResult.ErrorCode == "NOT_FOUND")
+        try
         {
-            return NotFound(new { message = "Пост не найден" });
-        }
 
-        if (!postResult.Success)
-        {
-            return StatusCode(503, new
+            var post = await postServiceClient
+                .GetPostByIdAsync(postId);
+
+            if (post == null)
             {
-                message = "Сервис постов временно недоступен",
-                errorCode = postResult.ErrorCode
-            });
-        }
+                return Problem(
+                    title: "Пост не найден",
+                    detail: $"Пост с идентификатором {postId} не найден",
+                    statusCode: StatusCodes.Status404NotFound
+                );
+            }
 
-        var postWithComments = new PostWithComments
-        {
-            Post = postResult.Data!,
-            Comments = commentsResult.Success
-                ? commentsResult.Data ?? []
-                : []
-        };
+            IEnumerable<CommentResponse> comments = [];
 
-        if (!commentsResult.Success)
-        {
-            return Ok(new
+            try
             {
-                message = "Сервис комментариев временно недоступен",
-                data = postWithComments
-            });
-        }
+                comments = await commentServiceClient
+                    .GetCommentsByPostAsync(postId);
+            }
+            catch (ServiceException ex)
+            {
+            }
 
-        return Ok(postWithComments);
+            var postWithComments = new PostWithComments
+            {
+                Post = post,
+                Comments = comments ?? []
+            };
+
+            return Ok(postWithComments);
+        }
+        catch (ServiceException ex)
+        {
+            return Problem(
+                title: ex.Title,
+                detail: ex.Message,
+                statusCode: (int)ex.StatusCode
+            );
+        }
+        catch (Exception ex)
+        {
+            return Problem(
+                title: "Внутренняя ошибка сервера",
+                detail: "Произошла непредвиденная ошибка",
+                statusCode: StatusCodes.Status500InternalServerError
+            );
+        }
     }
 }

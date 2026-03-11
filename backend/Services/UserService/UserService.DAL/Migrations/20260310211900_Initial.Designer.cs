@@ -12,7 +12,7 @@ using UserService.DAL.Database.DatabaseContext;
 namespace UserService.DAL.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20260222162302_Initial")]
+    [Migration("20260310211900_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -43,9 +43,6 @@ namespace UserService.DAL.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
-
-                    b.Property<int>("PostCount")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

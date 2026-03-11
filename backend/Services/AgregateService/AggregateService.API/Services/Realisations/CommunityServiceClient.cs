@@ -1,8 +1,9 @@
-using System;
 using System.Net;
 using System.Net.Sockets;
-using AggregateService.API.DTOs.Errors;
+using System.Text.Json;
+using AggregateService.API.Extensions.Exceptions;
 using AggregateService.API.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.Community.Responses;
 
 namespace AggregateService.API.Services.Realisations;
@@ -14,37 +15,40 @@ public class CommunityServiceClient(
     private readonly HttpClient _httpClient =
         clientFactory.CreateClient("CommunityService");
 
-    public async Task<ServiceResponse<CommunityResponse>> GetCommunityAsync(Guid communityId)
+    public async Task<CommunityResponse?> GetCommunityAsync(Guid communityId)
     {
         try
         {
             var response = await _httpClient
-                .GetAsync($"api/communities/{communityId}");
+                .GetAsync($"/api/communities/{communityId}");
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content
+                return await response.Content
                     .ReadFromJsonAsync<CommunityResponse>();
-
-                return ServiceResponse<CommunityResponse>
-                    .Ok(result!);
             }
+
+            var problem = await response.Content
+                .ReadFromJsonAsync<ProblemDetails>();
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                return ServiceResponse<CommunityResponse>
-                    .Fail("сообщество не найдено", "NOT_FOUND");
+                return null;
             }
 
-            return ServiceResponse<CommunityResponse>
-                .Fail("Ошибка при получении сообщества",
-                    "COMMUNITY_SERVICE_ERROR");
+            throw new ServiceException(
+                problem?.Detail ?? $"Ошибка при получении сообщества {communityId}",
+                problem?.Title ?? "CommunityServiceError",
+                response.StatusCode
+            );
         }
-        catch (HttpRequestException ex)
-            when (ex.InnerException is SocketException)
+        catch (HttpRequestException ex) when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<CommunityResponse>
-                .ServiceUnavailable("сообществ");
+            throw new ServiceException(
+                "Сервис сообществ временно недоступен",
+                "ServiceUnavailable",
+                HttpStatusCode.ServiceUnavailable
+            );
         }
     }
 }

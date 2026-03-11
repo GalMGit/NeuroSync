@@ -8,6 +8,7 @@ using AuthService.DAL.Repositories;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using NeuroSync.MinimalApi.Endpoints;
+using Shared.AuthExtensions;
 
 namespace AuthService.API.DI;
 
@@ -19,10 +20,10 @@ public static class DependencyInjection
     {
         services.AddOpenApi();
         services.AddSwaggerGen();
-        services.AddJwtConfiguration(configuration);
         services.AddEndpoints(typeof(Program).Assembly);
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
         services.AddServices(configuration);
+        services.AddAuth(configuration);
         
         return services;
     }

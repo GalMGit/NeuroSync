@@ -18,6 +18,7 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Controllers/CommunityControllers/" />
+      <Folder Include="Extensions/Exceptions/" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="..\.dockerignore">

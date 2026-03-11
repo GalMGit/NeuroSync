@@ -12,7 +12,7 @@ public interface IPostService
     Task<List<PostResponse>> GetAllByCommunityAsync(Guid communityId);
     Task SoftDeleteUserPostsAsync(Guid userId);
     Task RestoreUserPostsAsync(Guid userId);
-    Task SoftDeleteAsync(Guid postId);
+    Task SoftDeleteAsync(Guid postId, Guid userId);
     Task ForceDeleteAsync(Guid postId);
     Task<PostResponse> UpdatePostAsync(Guid postId, UpdatePostRequest request);
 }

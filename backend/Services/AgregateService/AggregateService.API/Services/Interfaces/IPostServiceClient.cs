@@ -5,7 +5,7 @@ namespace AggregateService.API.Services.Interfaces;
 
 public interface IPostServiceClient
 {
-    Task<ServiceResponse<IEnumerable<PostResponse>>> GetUserPostsAsync();
-    Task<ServiceResponse<PostResponse>> GetPostByIdAsync(Guid postId);
-    Task<ServiceResponse<IEnumerable<PostResponse>>> GetPostsByCommunityAsync(Guid communityId);
+    Task<IEnumerable<PostResponse>> GetUserPostsAsync();
+    Task<PostResponse> GetPostByIdAsync(Guid postId);
+    Task<IEnumerable<PostResponse>> GetPostsByCommunityAsync(Guid communityId);
 }

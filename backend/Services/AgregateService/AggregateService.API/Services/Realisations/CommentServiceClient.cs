@@ -1,6 +1,9 @@
+using System.Net;
 using System.Net.Sockets;
-using AggregateService.API.DTOs.Errors;
+using System.Text.Json;
+using AggregateService.API.Extensions.Exceptions;
 using AggregateService.API.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.Comment.Responses;
 
 namespace AggregateService.API.Services.Realisations;
@@ -12,30 +15,36 @@ public class CommentServiceClient(
     private readonly HttpClient _httpClient =
         clientFactory.CreateClient("CommentService");
 
-    public async Task<ServiceResponse<IEnumerable<CommentResponse>>> GetCommentsByPostAsync(Guid postId)
+    public async Task<IEnumerable<CommentResponse>> GetCommentsByPostAsync(Guid postId)
     {
         try
         {
             var response = await _httpClient
-                .GetAsync($"api/comments/post/{postId}");
+                .GetAsync($"/api/comments/post/{postId}");
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content
-                    .ReadFromJsonAsync<IEnumerable<CommentResponse>>();
-
-                return ServiceResponse<IEnumerable<CommentResponse>>
-                    .Ok(result ?? []);
+                return await response.Content
+                    .ReadFromJsonAsync<IEnumerable<CommentResponse>>()
+                       ?? [];
             }
 
-            return ServiceResponse<IEnumerable<CommentResponse>>
-                .Ok([]);
+            var problem = await response.Content
+                .ReadFromJsonAsync<ProblemDetails>();
+
+            throw new ServiceException(
+                problem?.Detail ?? $"Ошибка при получении комментариев для поста {postId}",
+                problem?.Title ?? "CommentServiceError",
+                response.StatusCode
+            );
         }
-        catch (HttpRequestException ex)
-            when (ex.InnerException is SocketException)
+        catch (HttpRequestException ex) when (ex.InnerException is SocketException)
         {
-            return ServiceResponse<IEnumerable<CommentResponse>>
-                .ServiceUnavailable("комментариев");
+            throw new ServiceException(
+                "Сервис комментариев временно недоступен",
+                "ServiceUnavailable",
+                HttpStatusCode.ServiceUnavailable
+            );
         }
     }
 }

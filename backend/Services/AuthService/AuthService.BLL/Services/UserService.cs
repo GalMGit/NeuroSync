@@ -5,6 +5,7 @@ using AutoMapper;
 using MassTransit;
 using Shared.Contracts.DTOs.Auth.Requests;
 using Shared.Contracts.DTOs.Auth.Responses;
+using Shared.Contracts.Enums;
 using Shared.Messaging.UserEvents;
 
 namespace AuthService.BLL.Services;
@@ -103,6 +104,7 @@ public class UserService(
         {
             throw new Exception("Пользователь не найден");
         }
+        
     
         if(!user.IsDeleted)
         {

@@ -15,9 +15,20 @@ public class PostDeleteController(
     [HttpDelete("delete/{postId:guid}")]
     public async Task<IActionResult> SoftDeletePostAsync(Guid postId)
     {
-        await postService
-            .SoftDeleteAsync(postId);
+        try
+        {
+            await postService
+                .SoftDeleteAsync(postId, UserId);
 
-        return Ok("Пост удален");
+            return Ok("Пост удален");
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

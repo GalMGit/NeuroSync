@@ -1,6 +1,8 @@
 using AggregateService.API.DTOs;
+using AggregateService.API.Extensions.Exceptions;
 using AggregateService.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.DTOs.Post.Responses;
 using Shared.WebApi;
 
 namespace AggregateService.API.Controllers.ProfileControllers;
@@ -15,127 +17,92 @@ public class ProfileController(
     [HttpGet("full")]
     public async Task<IActionResult> GetUserFullProfile()
     {
-        var profileTask = userClient.GetProfileAsync();
-        var postsTask = postClient.GetUserPostsAsync();
-
-        await Task.WhenAll(profileTask, postsTask);
-
-        var profileResult = profileTask.Result;
-        var postsResult = postsTask.Result;
-
-        if (!profileResult.Success && profileResult.ErrorCode == "UNAUTHORIZED")
+        try
         {
-            return Unauthorized(new
+            var profile = await userClient
+                .GetProfileAsync();
+
+            IEnumerable<PostResponse> posts = [];
+
+            try
             {
-                message = "Необходима авторизация",
-                errorCode = "UNAUTHORIZED"
-            });
-        }
-
-        if (!profileResult.Success)
-        {
-            return StatusCode(503, new
+                posts = await postClient
+                    .GetUserPostsAsync();
+            }
+            catch (ServiceException ex)
             {
-                message = "Сервис пользователей временно недоступен",
-                errorCode = profileResult.ErrorCode
-            });
-        }
 
-        var profileWithPosts = new ProfileWithPosts
-        {
-            Profile = profileResult.Data!,
-            Posts = postsResult.Success ? postsResult.Data
-            ?? []
-            : []
-        };
+            }
 
-        if (!postsResult.Success)
-        {
-            return Ok(new
+            var profileWithPosts = new ProfileWithPosts
             {
-                message = "Профиль загружен, но сервис постов временно недоступен",
-                data = profileWithPosts,
-                warnings = new[] { "Posts service unavailable" }
-            });
-        }
+                Profile = profile,
+                Posts = posts ?? []
+            };
 
-        return Ok(profileWithPosts);
+            return Ok(profileWithPosts);
+        }
+        catch (ServiceException ex)
+        {
+
+            return Problem(
+                title: ex.Title,
+                detail: ex.Message,
+                statusCode: (int)ex.StatusCode
+            );
+        }
+        catch (Exception ex)
+        {
+            return Problem(
+                title: "Внутренняя ошибка сервера",
+                detail: "Произошла непредвиденная ошибка",
+                statusCode: StatusCodes.Status500InternalServerError
+            );
+        }
     }
 
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUserByIdProfile(Guid userId)
     {
-        var profileTask = userClient.GetUserByIdAsync(userId);
-        var postsTask = postClient.GetUserPostsAsync();
-
-        await Task.WhenAll(profileTask, postsTask);
-
-        var profileResult = profileTask.Result;
-        var postsResult = postsTask.Result;
-
-        if (!profileResult.Success)
+        try
         {
-            if (profileResult.IsUserDeleted)
+            var profile = await userClient
+                .GetUserByIdAsync(userId);
+
+            IEnumerable<PostResponse> posts = [];
+
+            try
             {
-                return NotFound(new
-                {
-                    message = profileResult.ErrorMessage ?? "Пользователь был удален",
-                    errorCode = "USER_DELETED",
-                    isDeleted = true
-                });
+                posts = await postClient
+                    .GetUserPostsAsync();
+            }
+            catch (ServiceException ex)
+            {
             }
 
-            if (profileResult.IsNotFound)
+            var profileWithPosts = new ProfileWithPosts
             {
-                return NotFound(new
-                {
-                    message = profileResult.ErrorMessage ?? "Пользователь не найден",
-                    errorCode = "USER_NOT_FOUND",
-                    isDeleted = false
-                });
-            }
+                Profile = profile,
+                Posts = posts ?? []
+            };
 
-            if (profileResult.IsUnauthorized)
-            {
-                return Unauthorized(new
-                {
-                    message = "Необходима авторизация",
-                    errorCode = "UNAUTHORIZED"
-                });
-            }
-
-            if (profileResult.IsServiceUnavailable)
-            {
-                return StatusCode(503, new
-                {
-                    message = profileResult.ErrorMessage ?? "Сервис пользователей временно недоступен",
-                    errorCode = "USER_SERVICE_UNAVAILABLE"
-                });
-            }
-
-            return StatusCode(profileResult.StatusCode, new
-            {
-                message = profileResult.ErrorMessage ?? "Ошибка при получении данных пользователя",
-                errorCode = profileResult.ErrorCode ?? "USER_SERVICE_ERROR"
-            });
+            return Ok(profileWithPosts);
         }
-
-        var profileWithPosts = new ProfileWithPosts
+        catch (ServiceException ex)
         {
-            Profile = profileResult.Data!,
-            Posts = postsResult.Success ? postsResult.Data ?? [] : []
-        };
-
-        if (!postsResult.Success)
-        {
-            return Ok(new
-            {
-                message = "Профиль загружен, но сервис постов временно недоступен",
-                data = profileWithPosts,
-                warnings = new[] { "Posts service unavailable" }
-            });
+            return Problem(
+                title: ex.Title,
+                detail: ex.Message,
+                statusCode: (int)ex.StatusCode
+            );
         }
-
-        return Ok(profileWithPosts);
+        catch (Exception ex)
+        {
+            return Problem(
+                title: "Внутренняя ошибка сервера",
+                detail: "Произошла непредвиденная ошибка",
+                statusCode: StatusCodes.Status500InternalServerError
+            );
+        }
     }
 }

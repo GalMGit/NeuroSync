@@ -1,7 +1,9 @@
 using AggregateService.API.DTOs;
+using AggregateService.API.Extensions.Exceptions;
 using AggregateService.API.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.DTOs.Community.Responses;
+using Shared.Contracts.DTOs.Post.Responses;
 using Shared.WebApi;
 
 namespace AggregateService.API.Controllers.CommunityControllers;
@@ -11,53 +13,56 @@ namespace AggregateService.API.Controllers.CommunityControllers;
 public class CommunityController(
     ICommunityServiceClient communityServiceClient,
     IPostServiceClient postServiceClient
-    ) : BaseController
+) : BaseController
 {
     [HttpGet("{communityId:guid}")]
     public async Task<IActionResult> GetCommunityWithPostsAsync(Guid communityId)
     {
-        var postTask = postServiceClient
-            .GetPostsByCommunityAsync(communityId);
-        var communityTask = communityServiceClient
-            .GetCommunityAsync(communityId);
-
-        await Task.WhenAll(postTask, communityTask);
-
-        var postResult = postTask.Result;
-        var communityResult = communityTask.Result;
-
-        if (!communityResult.Success && communityResult.ErrorCode == "NOT_FOUND")
+        try
         {
-            return NotFound(new { message = "Сообщество не найдено" });
-        }
+            var communityTask = communityServiceClient
+                .GetCommunityAsync(communityId);
 
-        if (!communityResult.Success)
-        {
-            return StatusCode(503, new
+            var postsTask = postServiceClient
+                .GetPostsByCommunityAsync(communityId);
+
+            await Task.WhenAll(communityTask, postsTask);
+
+            var community = communityTask.Result;
+            var posts = postsTask.Result;
+
+            if (community == null)
             {
-                message = "Сервис сообществ временно недоступен",
-                errorCode = communityResult.ErrorCode
-            });
-        }
+                return Problem(
+                    title: "Сообщество не найдено",
+                    detail: $"Сообщество с идентификатором {communityId} не найдено",
+                    statusCode: StatusCodes.Status404NotFound
+                );
+            }
 
-        var communityWithPosts = new CommunityWithPosts
-        {
-            Community = communityResult.Data,
-            Posts = postResult.Success
-                ? postResult.Data ?? []
-                : []
-        };
-
-        if (!postResult.Success)
-        {
-            return Ok(new
+            var communityWithPosts = new CommunityWithPosts
             {
-                message = "Сервис постов временно недоступен",
-                data = communityWithPosts
-            });
-        }
+                Community = community,
+                Posts = posts ?? []
+            };
 
-        return Ok(communityWithPosts);
+            return Ok(communityWithPosts);
+        }
+        catch (ServiceException ex)
+        {
+            return Problem(
+                title: ex.Title,
+                detail: ex.Message,
+                statusCode: (int)ex.StatusCode
+            );
+        }
+        catch (Exception)
+        {
+            return Problem(
+                title: "Внутренняя ошибка сервера",
+                detail: "Произошла непредвиденная ошибка",
+                statusCode: StatusCodes.Status500InternalServerError
+            );
+        }
     }
 }
-

@@ -9,16 +9,15 @@ public class UserRepository(
     AuthDbContext database
     ) : IUserRepository
 {
-    public async Task<User> CreateAsync(User entity)
+    public async Task<User> CreateAsync(User user)
     {
         await database.Users
-            .AddAsync(entity);
-
+            .AddAsync(user);
+        
         await database.SaveChangesAsync();
-
-        return entity;
+        return user;
     }
-
+    
     public async Task<User?> GetByIdAsync(Guid id)
     {
         return await database.Users
