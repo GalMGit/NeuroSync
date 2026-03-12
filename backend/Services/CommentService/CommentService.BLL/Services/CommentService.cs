@@ -60,6 +60,17 @@ public class CommentService(
     public async Task RestoreDeletesUserCommentsAsync(Guid userId)
     {
         await commentRepository
-            .RestoreDeletesUserCommentsAsync(userId);
+            .RestoreDeletedUserCommentsAsync(userId);
+    }
+
+    public Task RestoreDeletedUserCommentsAsync(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task SoftDeleteAllByPostIdsAsync(List<Guid> postIds)
+    {
+        await commentRepository
+            .SoftDeleteAllByPostIdsAsync(postIds);
     }
 }

@@ -18,4 +18,8 @@ public interface IPostService
         Guid postId,
         Guid userId,
         UpdatePostRequest request);
+
+    Task SoftDeleteAllByCommunity(Guid communityId);
+
+    
 }

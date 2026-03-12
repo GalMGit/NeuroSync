@@ -1,19 +1,19 @@
 using System;
 using CommentService.CORE.Interfaces.IServices;
 using MassTransit;
-using Shared.Messaging.UserEvents;
+using Shared.Messaging.PostEvents;
 
 namespace CommentService.BLL.Consumers;
 
-public class UserRestoredConsumer(
+public class PostsDeletedConsumer(
     ICommentService commentService
-    ) : IConsumer<UserRestoredEvent>
+    ) : IConsumer<PostsDeletedEvent>
 {
-    public async Task Consume(ConsumeContext<UserRestoredEvent> context)
+    public async Task Consume(ConsumeContext<PostsDeletedEvent> context)
     {
         var message = context.Message;
 
         await commentService
-            .RestoreDeletedUserCommentsAsync(message.UserId);
+            .SoftDeleteAllByPostIdsAsync(message.PostIds);
     }
 }

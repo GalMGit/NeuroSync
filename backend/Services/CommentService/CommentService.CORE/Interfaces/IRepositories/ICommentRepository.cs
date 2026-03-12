@@ -7,5 +7,6 @@ public interface ICommentRepository : IRepository<Comment>
 {
     Task<List<Comment>> GetAllByPostAsync(Guid postId);
     Task SoftDeleteUserCommentsAsync(Guid userId);
-    Task RestoreDeletesUserCommentsAsync(Guid userId);
+    Task RestoreDeletedUserCommentsAsync(Guid userId);
+    Task SoftDeleteAllByPostIdsAsync(List<Guid> postIds);
 }

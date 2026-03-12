@@ -69,7 +69,7 @@ public class CommentRepository(
                     s.IsDeleted, true));
     }
 
-    public async Task RestoreDeletesUserCommentsAsync(Guid userId)
+    public async Task RestoreDeletedUserCommentsAsync(Guid userId)
     {
         await database.Comments
             .Where(x =>
@@ -79,4 +79,17 @@ public class CommentRepository(
                 x.SetProperty(s =>
                     s.IsDeleted, false));
     }
+
+
+    public async Task SoftDeleteAllByPostIdsAsync(List<Guid> postIds)
+    {
+        await database.Comments
+            .Where(x =>
+                postIds.Contains(x.PostId)
+                && !x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, true));
+    }
+
 }

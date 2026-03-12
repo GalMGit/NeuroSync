@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="CommunityEvents/" />
+      <Folder Include="PostEvents/" />
       <Folder Include="UserEvents/" />
     </ItemGroup>
 

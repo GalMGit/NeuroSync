@@ -2,14 +2,17 @@ using AutoMapper;
 using CommunityService.CORE.Entities;
 using CommunityService.CORE.Interfaces.IRepositories;
 using CommunityService.CORE.Interfaces.IServices;
+using MassTransit;
 using Shared.Contracts.DTOs.Community.Requests;
 using Shared.Contracts.DTOs.Community.Responses;
 using Shared.Contracts.Enums;
+using Shared.Messaging.CommunityEvents;
 
 namespace CommunityService.BLL.Services;
 
 public class CommunityService(
     ICommunityRepository communityRepository,
+    IPublishEndpoint publishEndpoint,
     IMapper mapper
     ) : ICommunityService
 {
@@ -100,5 +103,11 @@ public class CommunityService(
 
         await communityRepository
             .SoftDeleteAsync(id);
+
+        await publishEndpoint
+            .Publish(new CommunityDeletedEvent
+            {
+                CommunityId = id
+            });
     }
 }

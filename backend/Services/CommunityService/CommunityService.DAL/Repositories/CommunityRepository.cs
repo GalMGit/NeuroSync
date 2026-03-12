@@ -38,21 +38,34 @@ public class CommunityRepository(
 
     public async Task SoftDeleteAsync(Guid id)
     {
-        await database.Communities
-            .Where(x =>
-                x.Id == id
-                && !x.IsDeleted)
-            .ExecuteUpdateAsync(x =>
-                x.SetProperty(s =>
+        await using var transaction = await database.Database
+            .BeginTransactionAsync();
+
+        try
+        {
+            await database.Communities
+                .Where(x =>
+                    x.Id == id
+                    && !x.IsDeleted)
+                .ExecuteUpdateAsync(x =>
+                    x.SetProperty(s =>
                     s.IsDeleted, true));
 
-        await database.CommunityMembers
-            .Where(x =>
-                x.CommunityId == id
-                && !x.IsDeleted)
-            .ExecuteUpdateAsync(x =>
-                x.SetProperty(s =>
-                s.IsDeleted, true));
+            await database.CommunityMembers
+                .Where(x =>
+                    x.CommunityId == id
+                    && !x.IsDeleted)
+                .ExecuteUpdateAsync(x =>
+                    x.SetProperty(s =>
+                    s.IsDeleted, true));
+
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     public Task ForceDeleteAsync(Guid id)

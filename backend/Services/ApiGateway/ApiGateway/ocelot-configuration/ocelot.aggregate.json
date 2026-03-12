@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "UpstreamPathTemplate": "/gateway/profile/user",
+      "UpstreamPathTemplate": "/gateway/profile/full",
       "UpstreamHttpMethod": ["Get"],
       "DownstreamPathTemplate": "/aggregate/profile/full",
       "DownstreamScheme": "http",
@@ -16,7 +16,7 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/user/{userId}",
+      "UpstreamPathTemplate": "/gateway/profile/{userId}",
       "UpstreamHttpMethod": ["Get"],
       "DownstreamPathTemplate": "/aggregate/profile/{userId}",
       "DownstreamScheme": "http",

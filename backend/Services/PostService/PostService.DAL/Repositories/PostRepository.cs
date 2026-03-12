@@ -97,4 +97,25 @@ public class PostRepository(
                 x.SetProperty(s =>
                     s.IsDeleted, false));
     }
+
+    public async Task SoftDeleteAllByCommunityAsync(Guid communityId)
+    {
+        await database.Posts
+            .Where(x =>
+                x.CommunityId == communityId
+                && !x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, true));
+    }
+
+    public async Task<List<Guid>> GetPostIdsByCommunityAsync(Guid communityId)
+    {
+        return await database.Posts
+            .Where(x =>
+                x.CommunityId == communityId
+                && !x.IsDeleted)
+            .Select(x => x.Id)
+            .ToListAsync();
+    }
 }

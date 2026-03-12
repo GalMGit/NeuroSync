@@ -15,6 +15,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<UserDeletedConsumer>();
     x.AddConsumer<UserRestoredConsumer>();
+    x.AddConsumer<CommunityDeletedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -26,6 +27,11 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("post-user-restored-queue", e =>
         {
             e.ConfigureConsumer<UserRestoredConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("post-community-deleted-queue", e =>
+        {
+            e.ConfigureConsumer<CommunityDeletedConsumer>(context);
         });
     });
 });

@@ -1,15 +1,18 @@
 using AutoMapper;
+using MassTransit;
 using PostService.CORE.Entities;
 using PostService.CORE.Interfaces.IRepositories;
 using PostService.CORE.Interfaces.IServices;
 using Shared.Contracts.DTOs.Post.Requests;
 using Shared.Contracts.DTOs.Post.Responses;
+using Shared.Messaging.PostEvents;
 
 namespace PostService.BLL.Services;
 
 public class PostService(
     IPostRepository postRepository,
-    IMapper mapper
+    IMapper mapper,
+    IPublishEndpoint publishEndpoint
     ) : IPostService
 {
     public async Task<PostResponse> CreateAsync(
@@ -124,4 +127,19 @@ public class PostService(
         return mapper.Map<PostResponse>(updatedPost);
 
     }
+
+    public async Task SoftDeleteAllByCommunity(Guid communityId)
+    {
+        var postIds = await postRepository
+            .GetPostIdsByCommunityAsync(communityId);
+
+        await postRepository
+            .SoftDeleteAllByCommunityAsync(communityId);
+
+        await publishEndpoint.Publish(new PostsDeletedEvent
+        {
+            PostIds = postIds
+        });
+    }
+
 }

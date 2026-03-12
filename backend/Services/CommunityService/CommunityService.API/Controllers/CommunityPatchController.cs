@@ -14,7 +14,7 @@ public class CommunityPatchController(
     ) : BaseController
 {
     [HttpPatch("{communityId:guid}")]
-    public async Task<IActionResult> DeleteCommunityAsync(Guid communityId)
+    public async Task<IActionResult> SoftDeleteCommunityAsync(Guid communityId)
     {
         try
         {

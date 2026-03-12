@@ -1,19 +1,5 @@
 {
   "Routes": [
-    {
-      "UpstreamPathTemplate": "/gateway/user",
-      "UpstreamHttpMethod": ["Get"],
-      "DownstreamPathTemplate": "/api/user/profile",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5296
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    }
+
   ]
 }
