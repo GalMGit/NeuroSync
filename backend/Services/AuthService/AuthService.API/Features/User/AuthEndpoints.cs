@@ -27,7 +27,11 @@ public class AuthEndpoints : IEndpoint
         }
         catch (Exception e)
         {
-            return Results.BadRequest(e.Message);
+            return Results.Problem(
+                title: "Ошибка регистрации",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest
+            );
         }
 
     }
@@ -45,7 +49,11 @@ public class AuthEndpoints : IEndpoint
         }
         catch (Exception e)
         {
-            return Results.BadRequest(e.Message);
+            return Results.Problem(
+                title: "Ошибка входа",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest
+            );
         }
     }
 }

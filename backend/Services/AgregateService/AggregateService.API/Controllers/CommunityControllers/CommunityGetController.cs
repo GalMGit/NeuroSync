@@ -1,6 +1,7 @@
 using AggregateService.API.DTOs;
 using AggregateService.API.Extensions.Exceptions;
-using AggregateService.API.Services.Interfaces;
+using AggregateService.API.Services.Interfaces.ICommunity;
+using AggregateService.API.Services.Interfaces.IPost;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.Community.Responses;
 using Shared.Contracts.DTOs.Post.Responses;
@@ -10,9 +11,9 @@ namespace AggregateService.API.Controllers.CommunityControllers;
 
 [Route("aggregate/communities")]
 [ApiController]
-public class CommunityController(
+public class CommunityGetController(
     ICommunityServiceClient communityServiceClient,
-    IPostServiceClient postServiceClient
+    IPostGetServiceClient postServiceClient
 ) : BaseController
 {
     [HttpGet("{communityId:guid}")]

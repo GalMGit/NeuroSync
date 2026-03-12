@@ -28,6 +28,21 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/gateway/post",
+      "UpstreamHttpMethod": ["Post"],
+      "DownstreamPathTemplate": "/aggregate/posts",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5123
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
       "UpstreamPathTemplate": "/gateway/post/{postId}",
       "UpstreamHttpMethod": ["Get"],
       "DownstreamPathTemplate": "/aggregate/posts/{postId}",

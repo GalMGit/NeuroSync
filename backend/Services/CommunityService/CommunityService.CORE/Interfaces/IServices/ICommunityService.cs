@@ -14,4 +14,5 @@ public interface ICommunityService
     Task<List<CommunityResponse>> GetAllByUserAsync(Guid userId);
     Task SoftDeleteUserCommunities(Guid userId);
     Task RestoreDeletedUserCommunities(Guid userId);
+    Task<bool> CommunityExistAsync(Guid id);
 }

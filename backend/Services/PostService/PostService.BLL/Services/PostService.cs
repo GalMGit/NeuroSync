@@ -82,10 +82,10 @@ public class PostService(
         var post = await postRepository
                        .GetByIdAsync(postId)
                    ?? throw new Exception("Пост не найден");
-        
+
         if (post.AuthorId != userId)
             throw new UnauthorizedAccessException();
-        
+
         await postRepository
             .SoftDeleteAsync(postId);
     }
@@ -98,11 +98,15 @@ public class PostService(
 
     public async Task<PostResponse> UpdatePostAsync(
         Guid postId,
+        Guid userId,
         UpdatePostRequest request)
     {
         var existsPost = await postRepository
             .GetByIdAsync(postId)
                          ?? throw new Exception("Пост не найден");
+
+        if(existsPost.AuthorId != userId)
+            throw new UnauthorizedAccessException();
 
         if (!string.IsNullOrWhiteSpace(request.Title))
             existsPost.Title = request.Title;

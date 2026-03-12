@@ -1,6 +1,12 @@
 using AggregateService.API.Extensions;
-using AggregateService.API.Services.Interfaces;
-using AggregateService.API.Services.Realisations;
+using AggregateService.API.Services.Interfaces.IComment;
+using AggregateService.API.Services.Interfaces.ICommunity;
+using AggregateService.API.Services.Interfaces.IPost;
+using AggregateService.API.Services.Interfaces.IUser;
+using AggregateService.API.Services.Realisations.Comment;
+using AggregateService.API.Services.Realisations.Community;
+using AggregateService.API.Services.Realisations.Post;
+using AggregateService.API.Services.Realisations.User;
 using Shared.AuthExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,7 +47,8 @@ builder.Services.AddHttpClient("CommunityService", client =>
 builder.Services.AddAuth(builder.Configuration);
 
 builder.Services.AddScoped<IUserServiceClient, UserServiceClient>();
-builder.Services.AddScoped<IPostServiceClient, PostServiceClient>();
+builder.Services.AddScoped<IPostGetServiceClient, PostGetServiceClient>();
+builder.Services.AddScoped<IPostPostServiceClient, PostPostServiceClient>();
 builder.Services.AddScoped<ICommentServiceClient, CommentServiceClient>();
 builder.Services.AddScoped<ICommunityServiceClient, CommunityServiceClient>();
 

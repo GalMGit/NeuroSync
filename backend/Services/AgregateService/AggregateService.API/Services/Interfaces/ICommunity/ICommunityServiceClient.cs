@@ -1,0 +1,11 @@
+using System;
+using AggregateService.API.DTOs.Errors;
+using Shared.Contracts.DTOs.Community.Responses;
+
+namespace AggregateService.API.Services.Interfaces.ICommunity;
+
+public interface ICommunityServiceClient
+{
+    Task<CommunityResponse?> GetCommunityAsync(Guid communityId);
+    Task<bool?> CheckExistCommunityAsync(Guid? communityId);
+}

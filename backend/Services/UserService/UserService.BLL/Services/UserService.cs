@@ -30,12 +30,10 @@ public class UserService(
     {
         var profile = await userRepository
             .GetByIdAsync(userId)
-                ?? throw new Exception("Аккаунт не найден");
+                ?? throw new Exception("Пользователь не найден");
 
 
-        return profile.IsDeleted
-            ? throw new Exception("Аккаунт был удален")
-            : mapper.Map<UserProfileResponse>(profile);
+        return mapper.Map<UserProfileResponse>(profile);
     }
 
     public async Task RestoreAccountAsync(Guid userId)

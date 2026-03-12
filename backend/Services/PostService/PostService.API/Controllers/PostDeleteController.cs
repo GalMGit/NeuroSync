@@ -24,11 +24,19 @@ public class PostDeleteController(
         }
         catch (UnauthorizedAccessException)
         {
-            return Forbid();
+            return Problem(
+                title: "Ошибка удаления поста",
+                detail: "У вас нет прав на удаление этого поста",
+                statusCode: StatusCodes.Status403Forbidden
+            );
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return BadRequest(ex.Message);
+             return Problem(
+                title: "Ошибка удаления поста",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest
+            );
         }
     }
 }

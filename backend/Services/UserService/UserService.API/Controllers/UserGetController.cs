@@ -27,8 +27,7 @@ public class UserGetController(
             return Problem(
                 title: "Не авторизован",
                 detail: "Требуется авторизация для доступа к профилю",
-                statusCode: StatusCodes.Status401Unauthorized,
-                instance: HttpContext.Request.Path
+                statusCode: StatusCodes.Status401Unauthorized
             );
         }
         catch (Exception e)
@@ -36,12 +35,11 @@ public class UserGetController(
             return Problem(
                 title: "Ошибка получения профиля",
                 detail: e.Message,
-                statusCode: StatusCodes.Status400BadRequest,
-                instance: HttpContext.Request.Path
+                statusCode: StatusCodes.Status400BadRequest
             );
         }
     }
-    
+
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUserProfile(Guid userId)
     {
@@ -49,7 +47,7 @@ public class UserGetController(
         {
             var profile = await userService
                 .GetUserProfileAsync(userId);
-            
+
             return Ok(profile);
         }
         catch (UnauthorizedAccessException)
@@ -57,8 +55,7 @@ public class UserGetController(
             return Problem(
                 title: "Доступ запрещен",
                 detail: "У вас нет прав на просмотр этого профиля",
-                statusCode: StatusCodes.Status403Forbidden,
-                instance: HttpContext.Request.Path
+                statusCode: StatusCodes.Status403Forbidden
             );
         }
         catch (Exception e)
@@ -82,8 +79,7 @@ public class UserGetController(
             return Problem(
                 title: title,
                 detail: e.Message,
-                statusCode: statusCode,
-                instance: HttpContext.Request.Path
+                statusCode: statusCode
             );
         }
     }

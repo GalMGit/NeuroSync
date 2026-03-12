@@ -2,11 +2,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text.Json;
 using AggregateService.API.Extensions.Exceptions;
-using AggregateService.API.Services.Interfaces;
+using AggregateService.API.Services.Interfaces.IComment;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.Comment.Responses;
 
-namespace AggregateService.API.Services.Realisations;
+namespace AggregateService.API.Services.Realisations.Comment;
 
 public class CommentServiceClient(
     IHttpClientFactory clientFactory

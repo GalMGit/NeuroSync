@@ -1,9 +1,9 @@
 using AggregateService.API.DTOs.Errors;
 using Shared.Contracts.DTOs.Post.Responses;
 
-namespace AggregateService.API.Services.Interfaces;
+namespace AggregateService.API.Services.Interfaces.IPost;
 
-public interface IPostServiceClient
+public interface IPostGetServiceClient
 {
     Task<IEnumerable<PostResponse>> GetUserPostsAsync();
     Task<PostResponse> GetPostByIdAsync(Guid postId);

@@ -3,11 +3,11 @@ using System.Net.Sockets;
 using System.Text.Json;
 using AggregateService.API.DTOs.Errors;
 using AggregateService.API.Extensions.Exceptions;
-using AggregateService.API.Services.Interfaces;
+using AggregateService.API.Services.Interfaces.IUser;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.User.Responses;
 
-namespace AggregateService.API.Services.Realisations;
+namespace AggregateService.API.Services.Realisations.User;
 
 public class UserServiceClient(
     IHttpClientFactory clientFactory
@@ -54,7 +54,7 @@ public class UserServiceClient(
         }
     }
 
-        public async Task<UserProfileResponse> GetUserByIdAsync(Guid userId)
+    public async Task<UserProfileResponse> GetUserByIdAsync(Guid userId)
     {
         try
         {

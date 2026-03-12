@@ -28,6 +28,10 @@ public class CommunityService(
             OwnerName = username
         };
 
+        if(await communityRepository
+            .NameExistAsync(community.Name))
+                throw new ArgumentException("Сообщество с таким именом существует");
+
         community.CommunityMembers.Add(new CommunityMember
         {
             Id = Guid.NewGuid(),
@@ -47,7 +51,8 @@ public class CommunityService(
     public async Task<CommunityResponse?> GetByIdAsync(Guid id)
     {
         var community = await communityRepository
-            .GetByIdAsync(id);
+            .GetByIdAsync(id)
+                ?? throw new KeyNotFoundException("Сообщество не найдено");
 
         return mapper.Map<CommunityResponse>(community);
     }
@@ -78,5 +83,11 @@ public class CommunityService(
     {
         await communityRepository
             .RestoreDeletedUserCommunities(userId);
+    }
+
+    public async Task<bool> CommunityExistAsync(Guid id)
+    {
+        return await communityRepository
+            .CommunityExistAsync(id);
     }
 }

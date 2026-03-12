@@ -53,14 +53,14 @@ public class UserService(
     {
         var user = await userRepository
             .GetByEmailAsync(request.Email);
-        
+
         if (user is null || !passwordHasher
                 .VerifyHash(request.Password, user.PasswordHash))
             throw new Exception("Неверный логин или пароль");
 
         if (user.IsDeleted)
             throw new Exception("Пользователь не найден");
-        
+
         var token = jwtProvider
             .GenerateToken(user);
 
@@ -74,9 +74,9 @@ public class UserService(
     {
         var user = await userRepository
                        .GetByEmailAsync(request.Email) ??
-                   throw new Exception("Нет такого пользователя");
+                   throw new Exception("Пользователь не найден");
 
-        if (!user.IsDeleted)
+        if(!user.IsDeleted)
             throw new Exception("Пользователь не удален");
 
         if (passwordHasher.VerifyHash(request.Password, user.PasswordHash))
@@ -104,8 +104,8 @@ public class UserService(
         {
             throw new Exception("Пользователь не найден");
         }
-        
-    
+
+
         if(!user.IsDeleted)
         {
             await userRepository

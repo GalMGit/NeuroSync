@@ -77,4 +77,20 @@ public class CommunityRepository(
                 x.SetProperty(s =>
                     s.IsDeleted, false));
     }
+
+    public async Task<bool> NameExistAsync(string name)
+    {
+        return await database.Communities
+            .AnyAsync(x => x.Name
+                .ToLower()
+                .Equals(name.ToLower()));
+    }
+
+    public async Task<bool> CommunityExistAsync(Guid id)
+    {
+        return await database.Communities
+            .AnyAsync(x =>
+                x.Id == id
+                && !x.IsDeleted);
+    }
 }

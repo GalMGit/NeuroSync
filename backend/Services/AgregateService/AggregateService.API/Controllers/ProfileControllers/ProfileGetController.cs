@@ -1,6 +1,7 @@
 using AggregateService.API.DTOs;
 using AggregateService.API.Extensions.Exceptions;
-using AggregateService.API.Services.Interfaces;
+using AggregateService.API.Services.Interfaces.IPost;
+using AggregateService.API.Services.Interfaces.IUser;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.Post.Responses;
 using Shared.WebApi;
@@ -9,9 +10,9 @@ namespace AggregateService.API.Controllers.ProfileControllers;
 
 [ApiController]
 [Route("aggregate/profile")]
-public class ProfileController(
+public class ProfileGetController(
     IUserServiceClient userClient,
-    IPostServiceClient postClient
+    IPostGetServiceClient postClient
 ) : BaseController
 {
     [HttpGet("full")]
@@ -76,7 +77,7 @@ public class ProfileController(
                 posts = await postClient
                     .GetUserPostsAsync();
             }
-            catch (ServiceException ex)
+            catch (ServiceException e)
             {
             }
 
@@ -96,7 +97,7 @@ public class ProfileController(
                 statusCode: (int)ex.StatusCode
             );
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
             return Problem(
                 title: "Внутренняя ошибка сервера",

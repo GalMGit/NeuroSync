@@ -17,9 +17,29 @@ public class CommunityPostController(
     [Authorize]
     public async Task<IActionResult> CreateAsync(CreateCommunityRequest request)
     {
-        var community = await communityService
-            .CreateAsync(request, UserId, Username);
+        try
+        {
+            var community = await communityService
+                        .CreateAsync(request, UserId, Username);
 
-        return Ok(community);
+            return Ok(community);
+        }
+        catch (ArgumentException e)
+        {
+            return Problem(
+                title: "Ошибка при создании сообщества",
+                detail: e.Message,
+                statusCode: StatusCodes.Status409Conflict
+            );
+        }
+        catch (Exception e)
+        {
+            return Problem(
+                title: "Ошибка при создании сообщества",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest
+            );
+        }
+
     }
 }

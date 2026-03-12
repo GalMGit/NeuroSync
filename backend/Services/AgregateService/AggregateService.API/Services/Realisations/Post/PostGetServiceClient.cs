@@ -3,14 +3,15 @@ using System.Net.Sockets;
 using System.Text.Json;
 using AggregateService.API.Extensions.Exceptions;
 using AggregateService.API.Services.Interfaces;
+using AggregateService.API.Services.Interfaces.IPost;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.Post.Responses;
 
-namespace AggregateService.API.Services.Realisations;
+namespace AggregateService.API.Services.Realisations.Post;
 
-public class PostServiceClient(
+public class PostGetServiceClient(
     IHttpClientFactory clientFactory
-) : IPostServiceClient
+) : IPostGetServiceClient
 {
     private readonly HttpClient _httpClient = clientFactory
         .CreateClient("PostService");

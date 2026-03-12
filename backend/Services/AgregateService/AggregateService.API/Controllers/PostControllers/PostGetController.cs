@@ -1,6 +1,7 @@
 using AggregateService.API.DTOs;
 using AggregateService.API.Extensions.Exceptions;
-using AggregateService.API.Services.Interfaces;
+using AggregateService.API.Services.Interfaces.IComment;
+using AggregateService.API.Services.Interfaces.IPost;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.DTOs.Comment.Responses;
 using Shared.WebApi;
@@ -9,10 +10,9 @@ namespace AggregateService.API.Controllers.PostControllers;
 
 [ApiController]
 [Route("aggregate/posts")]
-public class PostController(
-    IPostServiceClient postServiceClient,
-    ICommentServiceClient commentServiceClient,
-    ILogger<PostController> logger
+public class PostGetController(
+    IPostGetServiceClient postServiceClient,
+    ICommentServiceClient commentServiceClient
 ) : BaseController
 {
     [HttpGet("{postId:guid}")]

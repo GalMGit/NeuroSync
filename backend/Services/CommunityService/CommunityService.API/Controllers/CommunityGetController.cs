@@ -19,7 +19,16 @@ public class CommunityGetController(
 
         return Ok(communities);
     }
-    
+
+    [HttpGet("exist/{communityId:guid}")]
+    public async Task<IActionResult> CheckCommunityExistAsync(Guid communityId)
+    {
+        var result = await communityService
+            .CommunityExistAsync(communityId);
+
+        return Ok(result);
+    }
+
     [HttpGet("user")]
     [Authorize]
     public async Task<IActionResult> GetAllByUserAsync()
@@ -34,9 +43,29 @@ public class CommunityGetController(
     [AllowAnonymous]
     public async Task<IActionResult> GetByIdAsync(Guid communityId)
     {
-        var community = await communityService
+        try
+        {
+            var community = await communityService
             .GetByIdAsync(communityId);
 
-        return Ok(community);
+            return Ok(community);
+        }
+        catch(KeyNotFoundException e)
+        {
+            return Problem(
+                title: "Ошибка при получении сообщества",
+                detail: e.Message,
+                statusCode: StatusCodes.Status404NotFound
+            );
+        }
+        catch(Exception e)
+        {
+            return Problem(
+                title: "Ошибка при получении сообщества",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest
+            );
+        }
+
     }
 }

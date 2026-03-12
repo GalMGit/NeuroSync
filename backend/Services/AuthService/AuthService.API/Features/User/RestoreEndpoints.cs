@@ -21,13 +21,17 @@ public class RestoreEndpoints : IEndpoint
         {
             await userService
                 .RestoreAccountAsync(request);
-        
+
             return Results.Ok("Аккаунт восстановлен");
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return Results.BadRequest(ex.Message);
+             return Results.Problem(
+                title: "Ошибка восстановления аккаунта",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest
+            );
         }
-       
+
     }
 }

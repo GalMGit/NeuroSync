@@ -21,13 +21,28 @@ public class PostPatchController(
         try
         {
             var updatedPost = await postService
-                .UpdatePostAsync(postId, request);
+                .UpdatePostAsync(
+                    postId,
+                    UserId,
+                    request);
 
             return Ok(updatedPost);
         }
-        catch (Exception ex)
+        catch(UnauthorizedAccessException)
         {
-            return BadRequest(ex.Message);
+            return Problem(
+                title: "Ошибка обновления поста",
+                detail: "У вас нет прав на изменение этого поста",
+                statusCode: StatusCodes.Status403Forbidden
+            );
+        }
+        catch (Exception e)
+        {
+            return Problem(
+                title: "Ошибка обновления поста",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest
+            );
         }
     }
 }

@@ -1,7 +1,7 @@
 using AggregateService.API.DTOs.Errors;
 using Shared.Contracts.DTOs.User.Responses;
 
-namespace AggregateService.API.Services.Interfaces;
+namespace AggregateService.API.Services.Interfaces.IUser;
 
 public interface IUserServiceClient
 {

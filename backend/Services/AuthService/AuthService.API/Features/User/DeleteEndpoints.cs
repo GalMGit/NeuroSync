@@ -24,7 +24,7 @@ public class DeleteEndpoints : IEndpoint
         try
         {
             var userId = claims.GetUserId();
-            
+
             await userService
                 .SoftDeleteAsync(userId);
 
@@ -32,7 +32,11 @@ public class DeleteEndpoints : IEndpoint
         }
         catch (Exception e)
         {
-            return Results.BadRequest(e.Message);
+            return Results.Problem(
+                title: "Ошибка удаления аккаунта",
+                detail: e.Message,
+                statusCode: StatusCodes.Status400BadRequest
+            );
         }
 
     }
