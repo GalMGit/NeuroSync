@@ -90,4 +90,15 @@ public class CommunityService(
         return await communityRepository
             .CommunityExistAsync(id);
     }
+
+    public async Task SoftDeleteAsync(Guid id)
+    {
+        if(!await CommunityExistAsync(id))
+        {
+            throw new KeyNotFoundException("Сообщество не существует");
+        }
+
+        await communityRepository
+            .SoftDeleteAsync(id);
+    }
 }

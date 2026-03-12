@@ -2,22 +2,21 @@ using System;
 using System.Security.Claims;
 using AuthService.API.Extensions;
 using AuthService.CORE.Interfaces.IServices;
-using Microsoft.AspNetCore.Mvc;
 using NeuroSync.MinimalApi.Endpoints;
 
 namespace AuthService.API.Features.User;
 
-public class DeleteEndpoints : IEndpoint
+public class PatchEndpoints : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("api/auth");
 
-        group.MapDelete("delete", Delete)
+        group.MapPatch("delete", SoftDelete)
             .RequireAuthorization();
     }
 
-    private async Task<IResult> Delete(
+    private async Task<IResult> SoftDelete(
         ClaimsPrincipal claims,
         IUserService userService)
     {

@@ -40,6 +40,21 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/gateway/communities/{id}",
+      "UpstreamHttpMethod": ["Patch"],
+      "DownstreamPathTemplate": "/api/communities/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5056
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
       "UpstreamPathTemplate": "/gateway/communities/user",
       "UpstreamHttpMethod": ["Get"],
       "DownstreamPathTemplate": "/api/communities/user",

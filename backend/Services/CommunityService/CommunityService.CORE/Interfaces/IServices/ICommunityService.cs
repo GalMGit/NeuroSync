@@ -15,4 +15,5 @@ public interface ICommunityService
     Task SoftDeleteUserCommunities(Guid userId);
     Task RestoreDeletedUserCommunities(Guid userId);
     Task<bool> CommunityExistAsync(Guid id);
+    Task SoftDeleteAsync(Guid id);
 }

@@ -36,9 +36,23 @@ public class CommunityRepository(
         throw new NotImplementedException();
     }
 
-    public Task SoftDeleteAsync(Guid id)
+    public async Task SoftDeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await database.Communities
+            .Where(x =>
+                x.Id == id
+                && !x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                    s.IsDeleted, true));
+
+        await database.CommunityMembers
+            .Where(x =>
+                x.CommunityId == id
+                && !x.IsDeleted)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(s =>
+                s.IsDeleted, true));
     }
 
     public Task ForceDeleteAsync(Guid id)
