@@ -49,7 +49,8 @@ builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddScoped<IUserServiceClient, UserServiceClient>();
 builder.Services.AddScoped<IPostGetServiceClient, PostGetServiceClient>();
 builder.Services.AddScoped<IPostPostServiceClient, PostPostServiceClient>();
-builder.Services.AddScoped<ICommentServiceClient, CommentServiceClient>();
+builder.Services.AddScoped<ICommentGetServiceClient, CommentGetServiceClient>();
+builder.Services.AddScoped<ICommentPostServiceClient, CommentPostServiceClient>();
 builder.Services.AddScoped<ICommunityServiceClient, CommunityServiceClient>();
 
 

@@ -118,4 +118,12 @@ public class PostRepository(
             .Select(x => x.Id)
             .ToListAsync();
     }
+
+    public async Task<bool> CheckPostExistAsync(Guid postId)
+    {
+        return await database.Posts
+            .AnyAsync(x =>
+                x.Id == postId
+                && !x.IsDeleted);
+    }
 }

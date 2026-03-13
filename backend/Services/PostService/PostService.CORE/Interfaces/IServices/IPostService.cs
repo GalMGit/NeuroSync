@@ -20,6 +20,6 @@ public interface IPostService
         UpdatePostRequest request);
 
     Task SoftDeleteAllByCommunity(Guid communityId);
+    Task<bool> CheckPostExistAsync(Guid postId);
 
-    
 }

@@ -11,4 +11,5 @@ public interface IPostRepository : IRepository<Post>
     Task RestoreUserPostsAsync(Guid userId);
     Task SoftDeleteAllByCommunityAsync(Guid communityId);
     Task<List<Guid>> GetPostIdsByCommunityAsync(Guid communityId);
+    Task<bool> CheckPostExistAsync(Guid postId);
 }

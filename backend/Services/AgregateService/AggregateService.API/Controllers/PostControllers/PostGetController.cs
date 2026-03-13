@@ -12,7 +12,7 @@ namespace AggregateService.API.Controllers.PostControllers;
 [Route("aggregate/posts")]
 public class PostGetController(
     IPostGetServiceClient postServiceClient,
-    ICommentServiceClient commentServiceClient
+    ICommentGetServiceClient commentGetServiceClient
 ) : BaseController
 {
     [HttpGet("{postId:guid}")]
@@ -37,7 +37,7 @@ public class PostGetController(
 
             try
             {
-                comments = await commentServiceClient
+                comments = await commentGetServiceClient
                     .GetCommentsByPostAsync(postId);
             }
             catch (ServiceException ex)

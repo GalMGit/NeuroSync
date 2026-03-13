@@ -118,4 +118,20 @@ public class PostGetServiceClient(
             );
         }
     }
+
+    public async Task<bool?> CheckPostExistAsync(Guid postId)
+    {
+        var response = await _httpClient
+            .GetAsync($"/api/posts/exist/{postId}");
+
+        if(response.IsSuccessStatusCode)
+        {
+            var result = await response.Content
+                .ReadFromJsonAsync<bool?>();
+
+            return result;
+        }
+        
+        return null;
+    }
 }

@@ -142,4 +142,9 @@ public class PostService(
         });
     }
 
+    public async Task<bool> CheckPostExistAsync(Guid postId)
+    {
+        return await postRepository
+            .CheckPostExistAsync(postId);
+    }
 }

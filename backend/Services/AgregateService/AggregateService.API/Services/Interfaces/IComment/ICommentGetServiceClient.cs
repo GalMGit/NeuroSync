@@ -3,7 +3,7 @@ using Shared.Contracts.DTOs.Comment.Responses;
 
 namespace AggregateService.API.Services.Interfaces.IComment;
 
-public interface ICommentServiceClient
+public interface ICommentGetServiceClient
 {
     Task<IEnumerable<CommentResponse>> GetCommentsByPostAsync(Guid postId);
 }

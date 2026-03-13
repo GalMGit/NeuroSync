@@ -21,6 +21,15 @@ public class PostGetController(
         return Ok(posts);
     }
 
+    [HttpGet("exist/{postId:guid}")]
+    public async Task<IActionResult> CheckPostExistAsync(Guid postId)
+    {
+        var result = await postService
+            .CheckPostExistAsync(postId);
+
+        return Ok(result);
+    }
+
     [HttpGet("{postId:guid}")]
     public async Task<IActionResult> GetPostByIdAsync(Guid postId)
     {

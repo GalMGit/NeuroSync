@@ -17,6 +17,7 @@
         
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Controllers/CommentControllers/" />
       <Folder Include="Extensions/Exceptions/" />
     </ItemGroup>
     <ItemGroup>

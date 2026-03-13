@@ -8,9 +8,9 @@ using Shared.Contracts.DTOs.Comment.Responses;
 
 namespace AggregateService.API.Services.Realisations.Comment;
 
-public class CommentServiceClient(
+public class CommentGetServiceClient(
     IHttpClientFactory clientFactory
-) : ICommentServiceClient
+) : ICommentGetServiceClient
 {
     private readonly HttpClient _httpClient =
         clientFactory.CreateClient("CommentService");

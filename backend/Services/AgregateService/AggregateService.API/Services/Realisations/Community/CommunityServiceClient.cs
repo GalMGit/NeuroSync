@@ -23,7 +23,7 @@ public class CommunityServiceClient(
         if(response.IsSuccessStatusCode)
         {
             return await response.Content
-                .ReadFromJsonAsync<bool>();
+                .ReadFromJsonAsync<bool?>();
         }
 
         return null;
