@@ -6,9 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="../../../Shared/Shared.Abstractions/Shared.Abstractions.csproj"/>
-        <ProjectReference Include="../../../Shared/Shared.Messaging/Shared.Messaging.csproj"/>
-        <ProjectReference Include="../../../Shared/Shared.Contracts/Shared.Contracts.csproj"/>
-        <ProjectReference Include="../../../Shared/Shared.Options/Shared.Options.csproj"/>
+        <ProjectReference Include="../../../Shared/Shared.Abstractions/Shared.Abstractions.csproj" />
+        <ProjectReference Include="../../../Shared/Shared.Messaging/Shared.Messaging.csproj" />
+        <ProjectReference Include="../../../Shared/Shared.Contracts/Shared.Contracts.csproj" />
+        <ProjectReference Include="../../../Shared/Shared.Options/Shared.Options.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Interfaces/IServices/IEvents/" />
+      <Folder Include="Interfaces/IServices/IQueries/" />
     </ItemGroup>
 </Project>

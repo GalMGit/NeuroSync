@@ -1,8 +1,16 @@
 using AuthService.API.Extensions;
 using AuthService.BLL.Mappers;
 using AuthService.BLL.Services;
+using AuthService.BLL.Services.Auth;
+using AuthService.BLL.Services.Commands;
+using AuthService.BLL.Services.IEvents;
+using AuthService.BLL.Services.Queries;
 using AuthService.CORE.Interfaces.IRepositories;
 using AuthService.CORE.Interfaces.IServices;
+using AuthService.CORE.Interfaces.IServices.IAuth;
+using AuthService.CORE.Interfaces.IServices.ICommands;
+using AuthService.CORE.Interfaces.IServices.IEvents;
+using AuthService.CORE.Interfaces.IServices.IQueries;
 using AuthService.DAL.Database.DatabaseContext;
 using AuthService.DAL.Repositories;
 using MassTransit;
@@ -24,7 +32,7 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
         services.AddServices(configuration);
         services.AddAuth(configuration);
-        
+
         return services;
     }
 
@@ -36,13 +44,16 @@ public static class DependencyInjection
         {
             x.UseNpgsql(configuration.GetConnectionString("Postgres"));
         });
-        
+
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IUserEventService, UserEventService>();
+        services.AddScoped<IUserCommandService, UserCommandService>();
+        services.AddScoped<IUserQueryService, UserQueryService>();
         services.AddScoped<IUserService, UserService>();
         return services;
     }
 
-   
+
 }

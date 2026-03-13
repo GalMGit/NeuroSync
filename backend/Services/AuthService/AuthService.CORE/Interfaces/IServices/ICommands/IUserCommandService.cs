@@ -1,16 +1,14 @@
+using System;
 using Shared.Contracts.DTOs.Auth.Requests;
 using Shared.Contracts.DTOs.Auth.Responses;
-using Shared.Contracts.DTOs.Auth.Responses.AuthUserResponse;
 
-namespace AuthService.CORE.Interfaces.IServices;
+namespace AuthService.CORE.Interfaces.IServices.ICommands;
 
-public interface IUserService
+public interface IUserCommandService
 {
     Task<RegisterResponse> CreateAsync(RegisterRequest request);
     Task<LoginResponse> LoginAsync(LoginRequest request);
+
     Task RestoreAccountAsync(LoginRequest request);
     Task SoftDeleteAsync(Guid userId);
-    Task<AuthUserResponse?> GetByIdAsync(Guid id);
-    Task<List<AuthUserResponse>> GetAllAsync();
-    Task<AuthUserResponse?> GetByEmailAsync(string email);
 }
