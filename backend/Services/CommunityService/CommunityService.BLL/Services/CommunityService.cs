@@ -1,113 +1,40 @@
-using AutoMapper;
-using CommunityService.CORE.Entities;
-using CommunityService.CORE.Interfaces.IRepositories;
 using CommunityService.CORE.Interfaces.IServices;
-using MassTransit;
+using CommunityService.CORE.Interfaces.IServices.ICommands;
+using CommunityService.CORE.Interfaces.IServices.IQueries;
 using Shared.Contracts.DTOs.Community.Requests;
 using Shared.Contracts.DTOs.Community.Responses;
-using Shared.Contracts.Enums;
-using Shared.Messaging.CommunityEvents;
 
 namespace CommunityService.BLL.Services;
 
 public class CommunityService(
-    ICommunityRepository communityRepository,
-    IPublishEndpoint publishEndpoint,
-    IMapper mapper
+    ICommunityQueryService communityQueryService,
+    ICommunityCommandService communityCommandService
     ) : ICommunityService
 {
     public async Task<CommunityResponse> CreateAsync(
         CreateCommunityRequest request,
         Guid userId,
         string username)
-    {
-        var community = new Community
-        {
-            Id = Guid.NewGuid(),
-            CreatedAt = DateTime.UtcNow,
-            Description = request.Description,
-            Name = request.Name,
-            OwnerId = userId,
-            OwnerName = username
-        };
-
-        if(await communityRepository
-            .NameExistAsync(community.Name))
-                throw new ArgumentException("Сообщество с таким именом существует");
-
-        community.CommunityMembers.Add(new CommunityMember
-        {
-            Id = Guid.NewGuid(),
-            CreatedAt = community.CreatedAt,
-            CommunityId = community.Id,
-            CommunityRole = CommunityRole.Creator,
-            MemberName = community.OwnerName,
-            UserId = community.OwnerId
-        });
-
-        var createdCommunity = await communityRepository
-            .CreateAsync(community);
-
-        return mapper.Map<CommunityResponse>(createdCommunity);
-    }
+    => await communityCommandService.CreateAsync(request, userId, username);
 
     public async Task<CommunityResponse?> GetByIdAsync(Guid id)
-    {
-        var community = await communityRepository
-            .GetByIdAsync(id)
-                ?? throw new KeyNotFoundException("Сообщество не найдено");
-
-        return mapper.Map<CommunityResponse>(community);
-    }
+        => await communityQueryService.GetByIdAsync(id);
 
     public async Task<List<CommunityResponse>> GetAllAsync()
-    {
-        var communities = await communityRepository
-            .GetAllAsync();
-
-        return mapper.Map<List<CommunityResponse>>(communities);
-    }
+        => await communityQueryService.GetAllAsync();
 
     public async Task<List<CommunityResponse>> GetAllByUserAsync(Guid userId)
-    {
-        var communities = await communityRepository
-            .GetAllByUserAsync(userId);
-
-        return mapper.Map<List<CommunityResponse>>(communities);
-    }
+        => await communityQueryService.GetAllByUserAsync(userId);
 
     public async Task SoftDeleteUserCommunities(Guid userId)
-    {
-        await communityRepository
-            .SoftDeleteUserCommunities(userId);
-    }
+        => await communityCommandService.SoftDeleteUserCommunities(userId);
 
     public async Task RestoreDeletedUserCommunities(Guid userId)
-    {
-        await communityRepository
-            .RestoreDeletedUserCommunities(userId);
-    }
+        => await communityCommandService.RestoreDeletedUserCommunities(userId);
 
     public async Task<bool> CommunityExistAsync(Guid id)
-    {
-        return await communityRepository
-            .CommunityExistAsync(id);
-    }
+        => await communityQueryService.CommunityExistAsync(id);
 
     public async Task SoftDeleteAsync(Guid id)
-    {
-        if(!await CommunityExistAsync(id))
-        {
-            throw new KeyNotFoundException("Сообщество не существует");
-        }
-
-        await communityRepository
-            .SoftDeleteAsync(id);
-
-        await publishEndpoint
-            .Publish(new CommunityDeletedEvent
-            {
-                CommunityId = id
-            });
-    }
+        => await communityCommandService.SoftDeleteAsync(id);
 }
