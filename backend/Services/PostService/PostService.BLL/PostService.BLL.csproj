@@ -19,6 +19,9 @@
 
     <ItemGroup>
       <Folder Include="Consumers/" />
+      <Folder Include="Services/Commands/" />
+      <Folder Include="Services/Events/" />
+      <Folder Include="Services/Queries/" />
     </ItemGroup>
 
 </Project>
