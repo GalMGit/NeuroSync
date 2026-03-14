@@ -4,47 +4,25 @@ using Shared.Messaging.UserEvents;
 using UserService.CORE.Entities;
 using UserService.CORE.Interfaces.IRepositories;
 using UserService.CORE.Interfaces.IServices;
+using UserService.CORE.Interfaces.IServices.ICommands;
+using UserService.CORE.Interfaces.IServices.IQueries;
 
 namespace UserService.BLL.Services;
 
 public class UserService(
-    IUserRepository userRepository,
-    IMapper mapper
+    IUserCommandService userCommandService,
+    IUserQueryService userQueryService
 ) : IUserService
 {
     public async Task CreateUserInfoAsync(UserCreatedEvent @event)
-    {
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
-            CreatedAt = DateTime.UtcNow,
-            DisplayName = @event.Username,
-            UserId = @event.UserId,
-        };
-
-        await userRepository
-            .CreateAsync(user);
-    }
+        => await userCommandService.CreateUserInfoAsync(@event);
 
     public async Task<UserProfileResponse?> GetUserProfileAsync(Guid userId)
-    {
-        var profile = await userRepository
-            .GetByIdAsync(userId)
-                ?? throw new Exception("Пользователь не найден");
-
-
-        return mapper.Map<UserProfileResponse>(profile);
-    }
+        => await userQueryService.GetUserProfileAsync(userId);
 
     public async Task RestoreAccountAsync(Guid userId)
-    {
-        await userRepository
-            .RestoreUserAsync(userId);
-    }
+        => await userCommandService.RestoreAccountAsync(userId);
 
     public async Task SoftDeleteAsync(Guid userId)
-    {
-        await userRepository
-            .SoftDeleteAsync(userId);
-    }
+        => await userCommandService.SoftDeleteAsync(userId);
 }
