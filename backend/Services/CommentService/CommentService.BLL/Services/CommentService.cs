@@ -2,75 +2,39 @@ using AutoMapper;
 using CommentService.CORE.Entities;
 using CommentService.CORE.Interfaces.IRepositories;
 using CommentService.CORE.Interfaces.IServices;
+using CommentService.CORE.Interfaces.IServices.ICommands;
+using CommentService.CORE.Interfaces.IServices.IQueries;
 using Shared.Contracts.DTOs.Comment.Requests;
 using Shared.Contracts.DTOs.Comment.Responses;
 
 namespace CommentService.BLL.Services;
 
 public class CommentService(
-    ICommentRepository commentRepository,
-    IMapper mapper
+    ICommentCommandService commentCommandService,
+    ICommentQueryService commentQueryService
     ) : ICommentService
 {
     public async Task<CommentResponse> CreateAsync(
         CreateCommentRequest request,
         Guid userId,
         string username)
-    {
-        var comment = new Comment
-        {
-            Id = Guid.NewGuid(),
-            CreatedAt = DateTime.UtcNow,
-            AuthorId = userId,
-            AuthorName = username,
-            Text = request.Text,
-            PostId = request.PostId
-        };
+        => await commentCommandService.CreateAsync(request, userId, username);
 
-        var createdComment = await commentRepository
-            .CreateAsync(comment);
+    public async Task<CommentResponse?> GetByIdAsync(Guid id)
+        => await commentQueryService.GetByIdAsync(id);
 
-        return mapper.Map<CommentResponse>(createdComment);
-    }
-
-    public Task<CommentResponse?> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<CommentResponse>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<List<CommentResponse>> GetAllAsync()
+        => await commentQueryService.GetAllAsync();
 
     public async Task<List<CommentResponse>> GetAllByPostAsync(Guid postId)
-    {
-        var comments = await commentRepository
-            .GetAllByPostAsync(postId);
-
-        return mapper.Map<List<CommentResponse>>(comments);
-    }
+        => await commentQueryService.GetAllByPostAsync(postId);
 
     public async Task SoftDeleteUserCommentsAsync(Guid userId)
-    {
-        await commentRepository
-            .SoftDeleteUserCommentsAsync(userId);
-    }
+        => await commentCommandService.SoftDeleteUserCommentsAsync(userId);
 
-    public async Task RestoreDeletesUserCommentsAsync(Guid userId)
-    {
-        await commentRepository
-            .RestoreDeletedUserCommentsAsync(userId);
-    }
-
-    public Task RestoreDeletedUserCommentsAsync(Guid userId)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task RestoreDeletedUserCommentsAsync(Guid userId)
+        => await commentCommandService.RestoreDeletedUserCommentsAsync(userId);
 
     public async Task SoftDeleteAllByPostIdsAsync(List<Guid> postIds)
-    {
-        await commentRepository
-            .SoftDeleteAllByPostIdsAsync(postIds);
-    }
+        => await commentCommandService.SoftDeleteAllByPostIdsAsync(postIds);
 }
