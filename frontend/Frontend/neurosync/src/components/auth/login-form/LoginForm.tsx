@@ -63,6 +63,9 @@ export const LoginForm = () => {
                     Регистрация
                 </button>
             </div>
+            <button
+                onClick={() => {navigate("/")}}
+                className={"to-main-button"}>На главную</button>
         </form>
     )
 }

@@ -40,6 +40,15 @@ public class AuthEndpoints : IEndpoint
         IUserService userService,
         LoginRequest request)
     {
+        if(string.IsNullOrEmpty(request.Email)
+            || string.IsNullOrEmpty(request.Password))
+        {
+            return Results.Problem(
+                title: "Запрос неверный",
+                detail: "Пустые поля",
+                statusCode: StatusCodes.Status400BadRequest
+            );
+        }
         try
         {
             var token = await userService

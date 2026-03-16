@@ -1,5 +1,6 @@
-import type {PostResponse} from "../../../models/post/responses/PostResponse.ts";
-import {PostCard} from "../post-card/PostCard.tsx";
+import type { PostResponse } from "../../../models/post/responses/PostResponse.ts";
+import { PostCard } from "../post-card/PostCard.tsx";
+import './PostList.css'
 
 interface PostListProps {
     posts: PostResponse[];
@@ -7,7 +8,7 @@ interface PostListProps {
 
 export const PostList = ({ posts }: PostListProps) => {
     return (
-        <div>
+        <div className={"post-list"}>
             {posts.map((post) => (
                 <PostCard
                     post={post}

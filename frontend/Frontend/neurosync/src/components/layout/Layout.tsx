@@ -23,7 +23,6 @@ export const Layout = () => {
                                         window.location.reload();
                                     }}
                                 >
-                                    <span className="nav-icon">🚪</span>
                                     <span>Выйти</span>
                                 </button>
                             </>
@@ -33,14 +32,12 @@ export const Layout = () => {
                                     className="nav-item"
                                     onClick={() => navigate('/')}
                                 >
-                                    <span className="nav-icon">🏠</span>
                                     <span>Главная</span>
                                 </button>
                                 <button
                                     className="nav-item"
                                     onClick={() => navigate('/auth')}
                                 >
-                                    <span className="nav-icon">🔑</span>
                                     <span>Вход</span>
                                 </button>
                             </>

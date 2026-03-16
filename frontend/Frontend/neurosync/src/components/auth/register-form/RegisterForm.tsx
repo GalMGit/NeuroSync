@@ -41,6 +41,7 @@ export const RegisterForm = () => {
                 required={true}
                 className={"auth-input"}
                 type={"email"}/>
+
             <input
                 name={"username"}
                 value={registerUser.username}
@@ -74,6 +75,9 @@ export const RegisterForm = () => {
                     className={"auth-button"}
                     type={"button"}>Вход</button>
             </div>
+            <button
+                onClick={() => {navigate("/")}}
+                className={"to-main-button"}>На главную</button>
         </form>
     )
 }

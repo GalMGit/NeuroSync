@@ -1,10 +1,11 @@
-import type {PostResponse} from "../../../models/post/responses/PostResponse.ts";
+import type { PostResponse } from "../../../models/post/responses/PostResponse.ts";
 import './PostCard.css'
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface PostCardProps {
     post: PostResponse;
 }
+
 export const PostCard = ({ post }: PostCardProps) => {
     const navigate = useNavigate();
 
@@ -13,19 +14,23 @@ export const PostCard = ({ post }: PostCardProps) => {
     }
 
     return (
-        <div>
-            <img src={post.posterUrl}
-                 height={300}
-                 style={{
-                     width: '100%',
-                     height: '300px',
-                     objectFit: 'contain',
-                     borderRadius: '8px'
-                 }}
-                 alt={post.title} />
-            <h3>{post.title}</h3>
-            <p>{post.description}</p>
-            <button onClick={handlePostClick} type="button">Подробнее</button>
+        <div className="post-card">
+            <img
+                src={post.posterUrl}
+                className="post-image"
+                alt={post.title}
+            />
+            <div className="post-content">
+                <h3 className="post-title">{post.title}</h3>
+                <p className="post-description">{post.description}</p>
+                <button
+                    onClick={handlePostClick}
+                    className="post-button"
+                    type="button"
+                >
+                    Подробнее
+                </button>
+            </div>
         </div>
     )
 }

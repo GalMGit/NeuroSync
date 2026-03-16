@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import {useParams} from "react-router-dom";
 import {postService} from "../../../services/post-service/postService.ts";
 import type {PostWithComments} from "../../../models/post/responses/PostWithComments.ts";
+import {CommentList} from "../../../comments/comment-list/CommentList.tsx";
+import './PostView.css'
 
 export const PostView = () => {
     const { postId } = useParams();
@@ -15,7 +17,6 @@ export const PostView = () => {
         }
     }, [postId]);
 
-
     if (!post) {
         return (
             <div className="loading-container">
@@ -26,10 +27,10 @@ export const PostView = () => {
     }
 
     return (
-        <div className="product-view">
-            <div className="product-view-container">
-                <div className="product-view-image">
-                    <div className="product-view-image-placeholder">
+        <div className="post-view">
+            <div className="post-view-container">
+                <div className="post-view-image">
+                    <div className="post-view-image-placeholder">
                         <img src={post.post.posterUrl}
                              height={300}
                              style={{
@@ -42,14 +43,15 @@ export const PostView = () => {
                     </div>
                 </div>
 
-                <div className="product-view-info">
+                <div className="post-view-info">
                     <h2>{post.post.title}</h2>
                     <p>{post.post.authorName}</p>
-                    <p className="product-view-description">
+                    <p className="post-view-description">
                         {post.post.description}
                     </p>
                 </div>
             </div>
+            <CommentList comments={post.comments}/>
         </div>
     );
 };
