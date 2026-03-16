@@ -5,7 +5,10 @@ namespace PostService.CORE.Interfaces.IServices;
 
 public interface IPostService
 {
-    Task<PostResponse> CreateAsync(CreatePostRequest request, Guid userId);
+    Task<PostResponse> CreateAsync(
+        CreatePostRequest request,
+        string username,
+        Guid userId);
     Task<PostResponse?> GetByIdAsync(Guid id);
     Task<List<PostResponse>> GetAllAsync();
     Task<List<PostResponse>> GetAllByUserAsync(Guid userId);

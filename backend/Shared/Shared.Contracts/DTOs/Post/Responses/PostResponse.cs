@@ -7,5 +7,7 @@ public class PostResponse
     public string Title { get; set; }
     public string Description { get; set; }
     public Guid? CommunityId { get; set; }
+    public string AuthorName { get; set; }
+    public string? CommunityName { get; set; }
     public string? PosterUrl { get; set; }
 }

@@ -18,8 +18,9 @@ public class PostService(
 {
     public async Task<PostResponse> CreateAsync(
         CreatePostRequest request,
+        string username,
         Guid userId)
-        => await postCommandService.CreateAsync(request, userId);
+        => await postCommandService.CreateAsync(request, username, userId);
 
     public async Task<PostResponse?> GetByIdAsync(Guid id)
         => await postQueryService.GetByIdAsync(id);

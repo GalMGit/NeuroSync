@@ -31,6 +31,10 @@ namespace PostService.DAL.Migrations
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("CommunityId")
                         .HasColumnType("uuid");
 

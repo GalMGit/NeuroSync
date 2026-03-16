@@ -17,7 +17,7 @@ public class PostPostController(
     public async Task<IActionResult> CreatePostAsync(CreatePostRequest request)
     {
         var post = await postService
-            .CreateAsync(request, UserId);
+            .CreateAsync(request, Username, UserId);
 
         return Ok(post);
     }

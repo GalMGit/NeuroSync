@@ -18,6 +18,7 @@ namespace PostService.DAL.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
+                    AuthorName = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     PosterUrl = table.Column<string>(type: "text", nullable: true),
                     CommunityId = table.Column<Guid>(type: "uuid", nullable: true),

@@ -1,7 +1,13 @@
 using CommunityService.BLL.Consumers;
 using CommunityService.BLL.Mappers;
+using CommunityService.BLL.Services.Commands;
+using CommunityService.BLL.Services.Events;
+using CommunityService.BLL.Services.Queries;
 using CommunityService.CORE.Interfaces.IRepositories;
 using CommunityService.CORE.Interfaces.IServices;
+using CommunityService.CORE.Interfaces.IServices.ICommands;
+using CommunityService.CORE.Interfaces.IServices.IEvents;
+using CommunityService.CORE.Interfaces.IServices.IQueries;
 using CommunityService.DAL.Database.DatabaseContext;
 using CommunityService.DAL.Repositories;
 using MassTransit;
@@ -39,6 +45,9 @@ builder.Services.AddDbContext<CommunityDbContext>(x =>
 });
 
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
+builder.Services.AddScoped<ICommunityEventService, CommunityEventService>();
+builder.Services.AddScoped<ICommunityQueryService, CommunityQueryService>();
+builder.Services.AddScoped<ICommunityCommandService, CommunityCommandService>();
 builder.Services.AddScoped<ICommunityService, CommunityService.BLL.Services.CommunityService>();
 
 builder.Services.AddAuth(builder.Configuration);

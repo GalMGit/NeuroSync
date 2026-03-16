@@ -6,7 +6,10 @@ namespace PostService.CORE.Interfaces.IServices.ICommands;
 
 public interface IPostCommandService
 {
-    Task<PostResponse> CreateAsync(CreatePostRequest request, Guid userId);
+    Task<PostResponse> CreateAsync(
+        CreatePostRequest request,
+        string username,
+        Guid userId);
     Task SoftDeleteUserPostsAsync(Guid userId);
     Task RestoreUserPostsAsync(Guid userId);
     Task SoftDeleteAsync(Guid postId, Guid userId);

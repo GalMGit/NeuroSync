@@ -3,8 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using NeuroSync.MinimalApi.Endpoints;
 using UserService.BLL.Consumers;
 using UserService.BLL.Mappers;
+using UserService.BLL.Services.Commands;
+using UserService.BLL.Services.Queries;
 using UserService.CORE.Interfaces.IRepositories;
 using UserService.CORE.Interfaces.IServices;
+using UserService.CORE.Interfaces.IServices.ICommands;
+using UserService.CORE.Interfaces.IServices.IQueries;
 using UserService.DAL.Database.DatabaseContext;
 using UserService.DAL.Repositories;
 
@@ -34,6 +38,8 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserQueryService, UserQueryService>();
+        services.AddScoped<IUserCommandService, UserCommandService>();
         services.AddScoped<IUserService, BLL.Services.UserService>();
         return services;
     }

@@ -2,8 +2,14 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using PostService.BLL.Consumers;
 using PostService.BLL.Mappers;
+using PostService.BLL.Services.Commands;
+using PostService.BLL.Services.Events;
+using PostService.BLL.Services.Queries;
 using PostService.CORE.Interfaces.IRepositories;
 using PostService.CORE.Interfaces.IServices;
+using PostService.CORE.Interfaces.IServices.ICommands;
+using PostService.CORE.Interfaces.IServices.IEvents;
+using PostService.CORE.Interfaces.IServices.IQueries;
 using PostService.DAL.Database.DatabaseContext;
 using PostService.DAL.Repositories;
 using Shared.AuthExtensions;
@@ -46,6 +52,9 @@ builder.Services.AddDbContext<PostDbContext>(x =>
 });
 
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IPostEventService, PostEventService>();
+builder.Services.AddScoped<IPostQueryService, PostQueryService>();
+builder.Services.AddScoped<IPostCommandService,PostCommandService>();
 builder.Services.AddScoped<IPostService, PostService.BLL.Services.PostService>();
 builder.Services.AddAuth(builder.Configuration);
 

@@ -16,6 +16,7 @@ public class PostCommandService(
 {
     public async Task<PostResponse> CreateAsync(
         CreatePostRequest request,
+        string username,
         Guid userId)
     {
         var post = new Post
@@ -24,6 +25,7 @@ public class PostCommandService(
             CreatedAt = DateTime.UtcNow,
             AuthorId = userId,
             CommunityId = request.CommunityId,
+            AuthorName = username,
             PosterUrl = request.PosterUrl,
             Title = request.Title,
             Description = request.Description

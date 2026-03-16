@@ -1,7 +1,13 @@
 using CommentService.BLL.Consumers;
 using CommentService.BLL.Mappers;
+using CommentService.BLL.Services.Commands;
+using CommentService.BLL.Services.Events;
+using CommentService.BLL.Services.Queries;
 using CommentService.CORE.Interfaces.IRepositories;
 using CommentService.CORE.Interfaces.IServices;
+using CommentService.CORE.Interfaces.IServices.ICommands;
+using CommentService.CORE.Interfaces.IServices.IEvents;
+using CommentService.CORE.Interfaces.IServices.IQueries;
 using CommentService.DAL.Database.DatabaseContext;
 using CommentService.DAL.Repositories;
 using MassTransit;
@@ -46,6 +52,9 @@ builder.Services.AddDbContext<CommentDbContext>(x =>
 });
 
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentEventService, CommentEventService>();
+builder.Services.AddScoped<ICommentQueryService, CommentQueryService>();
+builder.Services.AddScoped<ICommentCommandService, CommentCommandService>();
 builder.Services.AddScoped<ICommentService, CommentService.BLL.Services.CommentService>();
 
 builder.Services.AddAuth(builder.Configuration);
