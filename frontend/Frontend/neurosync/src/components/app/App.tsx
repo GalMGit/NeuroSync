@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom'
-import {Home} from "../Home/Home.tsx";
+import {Home} from "../home/Home.tsx";
 import {Layout} from "../layout/Layout.tsx";
 import {AuthMain} from "../auth/auth-main/AuthMain.tsx";
 import {LoginForm} from "../auth/login-form/LoginForm.tsx";
