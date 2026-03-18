@@ -1,63 +1,88 @@
-using Microsoft.EntityFrameworkCore;
-using Shared.Abstractions.Interfaces;
+using MongoDB.Driver;
 using UserService.CORE.Entities;
 using UserService.CORE.Interfaces.IRepositories;
-using UserService.DAL.Database.DatabaseContext;
+using UserService.DAL.Database.DbFactory;
 
 namespace UserService.DAL.Repositories;
 
-public class UserRepository(
-    UserDbContext database
-    ) : IUserRepository
+public class UserRepository(DbFactory database) : IUserRepository
 {
+    private readonly IMongoCollection<User> _usersCollection
+        = database.GetUsersCollection();
+
     public async Task<User> CreateAsync(User user)
     {
-        await database.Users.AddAsync(user);
-        await database.SaveChangesAsync();
+        await _usersCollection.InsertOneAsync(user);
         return user;
     }
 
     public async Task<User?> GetByIdAsync(Guid userId)
     {
-        return await database.Users
-            .FirstOrDefaultAsync(x =>
-                x.UserId == userId);
+        var filter = Builders<User>.Filter.And(
+            Builders<User>.Filter.Eq(u => u.UserId, userId),
+            Builders<User>.Filter.Eq(u => u.IsDeleted, false)
+        );
+
+        return await _usersCollection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public Task<List<User>> GetAllAsync()
+    public async Task<List<User>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var filter = Builders<User>.Filter.Eq(u => u.IsDeleted, false);
+        return await _usersCollection.Find(filter).ToListAsync();
     }
 
-    public Task<User> UpdateAsync(User entity)
+    public async Task<User> UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+        var filter = Builders<User>.Filter.And(
+            Builders<User>.Filter.Eq(u => u.UserId, user.UserId),
+            Builders<User>.Filter.Eq(u => u.IsDeleted, false)
+        );
+
+        var options = new FindOneAndReplaceOptions<User>
+        {
+            ReturnDocument = ReturnDocument.After
+        };
+
+        var updatedUser = await _usersCollection
+            .FindOneAndReplaceAsync(filter, user, options);
+
+        return updatedUser;
     }
 
     public async Task SoftDeleteAsync(Guid id)
     {
-        await database.Users
-            .Where(x =>
-                x.UserId == id
-                && !x.IsDeleted)
-            .ExecuteUpdateAsync(x =>
-                x.SetProperty(s =>
-                    s.IsDeleted, true));
+        var filter = Builders<User>.Filter.And(
+            Builders<User>.Filter.Eq(u => u.UserId, id),
+            Builders<User>.Filter.Eq(u => u.IsDeleted, false)
+        );
+
+        var update = Builders<User>.Update
+            .Set(u => u.IsDeleted, true)
+            .Set(u => u.UpdatedAt, DateTime.UtcNow);
+
+        var result = await _usersCollection
+            .UpdateOneAsync(filter, update);
     }
 
-    public Task ForceDeleteAsync(Guid id)
+    public async Task ForceDeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var filter = Builders<User>.Filter.Eq(u => u.UserId, id);
+        var result = await _usersCollection.DeleteOneAsync(filter);
     }
 
     public async Task RestoreUserAsync(Guid userId)
     {
-        await database.Users
-            .Where(x =>
-                x.UserId == userId
-                && x.IsDeleted)
-            .ExecuteUpdateAsync(x =>
-                x.SetProperty(s =>
-                    s.IsDeleted, false));
+        var filter = Builders<User>.Filter.And(
+            Builders<User>.Filter.Eq(u => u.UserId, userId),
+            Builders<User>.Filter.Eq(u => u.IsDeleted, true)
+        );
+
+        var update = Builders<User>.Update
+            .Set(u => u.IsDeleted, false)
+            .Set(u => u.UpdatedAt, DateTime.UtcNow);
+
+        var result = await _usersCollection
+            .UpdateOneAsync(filter, update);
     }
 }

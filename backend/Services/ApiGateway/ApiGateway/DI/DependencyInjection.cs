@@ -11,9 +11,9 @@ public static class DependencyInjection
         services.AddOpenApi();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        
+
         services.AddAuth(configuration);
-        
+
         return services;
     }
 }

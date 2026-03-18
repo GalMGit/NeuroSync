@@ -16,30 +16,26 @@ public class PostPostServiceClient(
 
     public async Task<PostResponse?> CreatePostAsync(CreatePostRequest request)
     {
-        bool? communityExist = null;
-
-        if(request.CommunityId.HasValue)
+        if (request.CommunityId.HasValue)
         {
-             communityExist = await communityServiceClient
-                .CheckExistCommunityAsync(request.CommunityId);
-        }
+            var communityExists = await communityServiceClient
+                .CheckExistCommunityAsync(request.CommunityId.Value);
 
-        if (communityExist != true)
-        {
-            throw new KeyNotFoundException("Сообщество не существует");
-        }
-        else
-        {
-            var response = await _httpClient
-                .PostAsJsonAsync($"/api/posts", request);
-
-            if (response.IsSuccessStatusCode)
+            if (communityExists != true)
             {
-                return await response.Content
-                    .ReadFromJsonAsync<PostResponse>();
+                throw new KeyNotFoundException($"Сообщество с ID {request.CommunityId} не существует");
             }
-
-            return null;
         }
+
+        var response = await _httpClient
+            .PostAsJsonAsync($"/api/posts", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content
+                .ReadFromJsonAsync<PostResponse>();
+        }
+
+        return null;
     }
 }

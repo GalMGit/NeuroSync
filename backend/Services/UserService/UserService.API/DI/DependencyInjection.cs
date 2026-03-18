@@ -9,7 +9,7 @@ using UserService.CORE.Interfaces.IRepositories;
 using UserService.CORE.Interfaces.IServices;
 using UserService.CORE.Interfaces.IServices.ICommands;
 using UserService.CORE.Interfaces.IServices.IQueries;
-using UserService.DAL.Database.DatabaseContext;
+using UserService.DAL.Database.DbFactory;
 using UserService.DAL.Repositories;
 
 namespace UserService.API.DI;
@@ -32,10 +32,11 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<UserDbContext>(x =>
-        {
-            x.UseNpgsql(configuration.GetConnectionString("Postgres"));
-        });
+
+        services.AddSingleton(_ => new DbFactory(
+            configuration["Database:ConnectionString"],
+            configuration["Database:DatabaseName"]
+        ));
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserQueryService, UserQueryService>();

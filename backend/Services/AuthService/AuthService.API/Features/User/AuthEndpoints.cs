@@ -45,7 +45,7 @@ public class AuthEndpoints : IEndpoint
         {
             return Results.Problem(
                 title: "Запрос неверный",
-                detail: "Пустые поля",
+                detail: "Проверьте заполненность всех полей",
                 statusCode: StatusCodes.Status400BadRequest
             );
         }

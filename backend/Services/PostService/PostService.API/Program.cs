@@ -10,7 +10,7 @@ using PostService.CORE.Interfaces.IServices;
 using PostService.CORE.Interfaces.IServices.ICommands;
 using PostService.CORE.Interfaces.IServices.IEvents;
 using PostService.CORE.Interfaces.IServices.IQueries;
-using PostService.DAL.Database.DatabaseContext;
+using PostService.DAL.Database.DbFactory;
 using PostService.DAL.Repositories;
 using Shared.AuthExtensions;
 
@@ -46,10 +46,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(typeof(PostMappingProfile).Assembly);
-builder.Services.AddDbContext<PostDbContext>(x =>
-{
-    x.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
-});
+
+builder.Services.AddSingleton(_ => new DbFactory(
+    builder.Configuration["Database:ConnectionString"],
+    builder.Configuration["Database:DatabaseName"]
+));
 
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostEventService, PostEventService>();

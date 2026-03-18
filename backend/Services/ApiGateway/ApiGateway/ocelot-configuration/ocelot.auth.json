@@ -38,7 +38,7 @@
     },
     {
       "UpstreamPathTemplate": "/gateway/user/delete",
-      "UpstreamHttpMethod": ["Delete"],
+      "UpstreamHttpMethod": ["Patch"],
       "DownstreamPathTemplate": "/api/auth/delete",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

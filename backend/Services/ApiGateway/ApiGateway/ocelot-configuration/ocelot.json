@@ -174,7 +174,7 @@
       "UpstreamHeaderTransform": {},
       "UpstreamHost": null,
       "UpstreamHttpMethod": [
-        "Delete"
+        "Patch"
       ],
       "UpstreamPathTemplate": "/gateway/user/delete",
       "AuthenticationOptions": {
