@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PostService.CORE\PostService.CORE.csproj" />
-      <ProjectReference Include="..\PostService.DAL\PostService.DAL.csproj" />
     </ItemGroup>
 
     <ItemGroup>

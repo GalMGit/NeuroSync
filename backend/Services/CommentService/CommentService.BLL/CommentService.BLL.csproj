@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CommentService.CORE\CommentService.CORE.csproj" />
-      <ProjectReference Include="..\CommentService.DAL\CommentService.DAL.csproj" />
     </ItemGroup>
 
     <ItemGroup>
