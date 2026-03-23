@@ -11,7 +11,7 @@ public class CreatePostRequest
 
     [Required(ErrorMessage = "Content не может быть пустым")]
     [MaxLength(1000, ErrorMessage = "Content не может иметь более 1000 символов")]
-    public string Content { get; set; }
+    public string Description { get; set; }
 
     public string? PosterUrl { get; set; }
     public Guid? CommunityId { get; set; }
